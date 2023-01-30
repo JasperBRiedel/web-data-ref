@@ -7,7 +7,7 @@ const doc = {
         description: 'JSON REST API for tracking animal sightings',
     },
     host: 'localhost:8080',
-    basePath: '/',
+    basePath: '',
     schemes: ['http'],
     consumes: ['application/json'],
     produces: ['application/json'],
@@ -17,4 +17,4 @@ const doc = {
 const outputFile = './swagger-output.json';
 const endpointsFiles = ['./server.js'];
 
-swaggerAutogen()(outputFile, endpointsFiles, doc);
+swaggerAutogen({ openapi: "3.0.0" })(outputFile, endpointsFiles, doc);
