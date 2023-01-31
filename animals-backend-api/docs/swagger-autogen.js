@@ -14,7 +14,7 @@ const doc = {
 
 };
 
-const outputFile = './swagger-output.json';
+const outputFile = './docs/swagger-output.json';
 const endpointsFiles = ['./server.js'];
 
 swaggerAutogen({ openapi: "3.0.0" })(outputFile, endpointsFiles, doc);

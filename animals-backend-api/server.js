@@ -23,6 +23,10 @@ app.use(cors({
 // or other general middleware.
 app.use(express.json())
 
+// Import and enable swagger documentation pages
+import docsRouter from "./middleware/swagger-doc.js"
+app.use(docsRouter)
+
 // Import and use the routers of each controller.
 import animalsController from "./controllers/animals.js"
 app.use(animalsController)
