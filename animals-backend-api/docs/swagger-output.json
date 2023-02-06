@@ -61,6 +61,21 @@
           "200": {
             "description": "OK"
           }
+        },
+        "requestBody": {
+          "description": "Adding new user.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "name": "string",
+                "species": "string"
+              },
+              "example": {
+                "name": "Bird",
+                "species": "Fancy bird"
+              }
+            }
+          }
         }
       },
       "patch": {

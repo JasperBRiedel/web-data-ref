@@ -59,6 +59,23 @@ const createAnimalSchema = {
 
 animalController.post("/animals/", validate({ body: createAnimalSchema }), (req, res) => {
     // #swagger.summary = 'Create a specific animal'
+    /* #swagger.requestBody = {
+            description: 'Adding new user.',
+            content: {
+                'application/json': {
+                    schema: {
+                        name: 'string',
+                        species: 'string',
+                    },
+                    example: {
+                        name: 'Bird',
+                        species: 'Fancy bird',
+                    }
+                }
+            }
+            
+        } 
+    */
     const animal = req.body
 
     res.status(200).json({
