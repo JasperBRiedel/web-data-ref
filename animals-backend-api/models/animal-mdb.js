@@ -1,5 +1,3 @@
-// Need: getAll, getOne, create, update, delete
-
 import { Animal } from "./animal.js"
 import { ObjectId } from "mongodb"
 import { db } from "../database/mongodb.js"
@@ -10,7 +8,7 @@ export async function getAll() {
     let allAnimalsResults = await db.collection("animals").find().toArray()
     // Convert the collection of results into a list of Animal objects
     return await allAnimalsResults.map((animalResult) =>
-        Animal(animalResult._id, animalResult.name, animalResult.species))
+        Animal(animalResult._id.toString(), animalResult.name, animalResult.species))
 }
 
 export async function getByID(animalID) {
@@ -19,7 +17,7 @@ export async function getByID(animalID) {
     // Convert the result into an Animal object
     if (animalResult) {
         return Promise.resolve(
-            Animal(animalResult._id, animalResult.name, animalResult.species)
+            Animal(animalResult._id.toString(), animalResult.name, animalResult.species)
         )
     } else {
         return Promise.reject("no results found")
@@ -30,7 +28,10 @@ export async function create(animal) {
     // New animals should not have existing IDs, delete just to be sure.
     delete animal.id
     // Insert animal object and return resulting promise
-    return db.collection("animals").insertOne(animal)
+    return db.collection("animals").insertOne(animal).then(result => {
+        delete animal._id
+        return { ...animal, id: result.insertedId.toString() }
+    })
 }
 
 export async function update(animal) {

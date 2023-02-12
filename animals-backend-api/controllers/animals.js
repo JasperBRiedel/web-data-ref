@@ -2,6 +2,8 @@ import { Router } from "express";
 
 import { validate } from "../middleware/validator.js";
 
+import models from "../models/model-switcher.js"
+
 const animalController = Router()
 
 //// Get animal list endpoint
@@ -10,12 +12,15 @@ const getAnimalListSchema = {
     properties: {}
 }
 
-animalController.get("/animals", validate({ body: getAnimalListSchema }), (req, res) => {
+animalController.get("/animals", validate({ body: getAnimalListSchema }), async (req, res) => {
     // #swagger.summary = 'Get a collection of all animals'
+
+    const animals = await models.animalModel.getAll()
+
     res.status(200).json({
         status: 200,
         message: "Get all animals - Not yet implemented",
-        animals: []
+        animals: animals,
     })
 })
 //// End get animal list endpoint
