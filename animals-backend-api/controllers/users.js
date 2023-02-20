@@ -121,6 +121,7 @@ userController.get(
 //// Get user by ID endpoint
 const getUserByIDSchema = {
     type: "object",
+    required: ["id"],
     properties: {
         id: {
             type: "string",
@@ -134,7 +135,7 @@ userController.get(
     (req, res) => {
         const userID = req.params.id
 
-        models.userController.getByID(userID).then(user => {
+        models.userModel.getByID(userID).then(user => {
             res.status(200).json({
                 status: 200,
                 message: "Get user by ID",
@@ -149,6 +150,38 @@ userController.get(
     }
 )
 
+//// Get user by authentication key endpoint
+const getUserByAuthenticationKeySchema = {
+    type: "object",
+    required: ["authenticationKey"],
+    properties: {
+        authenticationKey: {
+            type: "string",
+        }
+    }
+}
+
+userController.get(
+    "/users/by-key/:authenticationKey",
+    validate({ params: getUserByAuthenticationKeySchema }),
+    (req, res) => {
+        const authenticationKey = req.params.authenticationKey
+        console.log(authenticationKey)
+
+        models.userModel.getByAuthenticationKey(authenticationKey).then(user => {
+            res.status(200).json({
+                status: 200,
+                message: "Get user by authentication key",
+                user: user,
+            })
+        }).catch(error => {
+            res.status(500).json({
+                status: 500,
+                message: "Failed to get user by authentication key",
+            })
+        })
+    }
+)
 
 //// Create user endpoint
 const createUserSchema = {
