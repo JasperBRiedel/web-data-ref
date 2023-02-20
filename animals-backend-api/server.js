@@ -30,6 +30,8 @@ app.use(docsRouter)
 // Import and use the routers of each controller.
 import animalsController from "./controllers/animals.js"
 app.use(animalsController)
+import usersController from "./controllers/users.js"
+app.use(usersController)
 
 // Enable JSON validation error middleware
 //

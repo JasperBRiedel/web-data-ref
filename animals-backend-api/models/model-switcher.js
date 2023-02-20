@@ -11,7 +11,8 @@ if (databaseBackend == "mysql") {
     }
 } else if (databaseBackend == "mdb") {
     models = {
-        animalModel: await import("./animal-mdb.js")
+        animalModel: await import("./animal-mdb.js"),
+        userModel: await import("./user-mdb.js")
     }
 } else {
     console.log("invalid database backend selected")

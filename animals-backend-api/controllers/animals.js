@@ -31,7 +31,6 @@ const getAnimalByIDSchema = {
     properties: {
         id: {
             type: "string",
-            pattern: "^[0-9]+$"
         }
     }
 }
@@ -40,10 +39,17 @@ animalController.get("/animals/:id", validate({ params: getAnimalByIDSchema }), 
     // #swagger.summary = 'Get a specific animal by ID'
     const animalID = req.params.id
 
-    res.status(200).json({
-        status: 200,
-        message: "Get animal by ID - Not yet implemented",
-        animal: {},
+    models.animalModel.getByID(animalID).then(animal => {
+        res.status(200).json({
+            status: 200,
+            message: "Get animal by ID",
+            animal: animal
+        })
+    }).catch(error => {
+        res.status(500).json({
+            status: 500,
+            message: "Failed to get animal by ID",
+        })
     })
 })
 //// End get animal by ID endpoint
@@ -81,11 +87,24 @@ animalController.post("/animals/", validate({ body: createAnimalSchema }), (req,
             
         } 
     */
-    const animal = req.body
+    // Get the animal data out of the request
+    const animalData = req.body
 
-    res.status(200).json({
-        status: 200,
-        message: "Create animal - Not yet implemented",
+    // Convert the animal data into an Animal model object
+    const animal = Animal(null, animalData.name, animalData.species)
+
+    // Use the create model function to insert this animal into the DB
+    models.animalModel.create(animal).then(animal => {
+        res.status(200).json({
+            status: 200,
+            message: "Created animal",
+            animal: animal,
+        })
+    }).catch(error => {
+        res.status(500).json({
+            status: 500,
+            message: "Failed to created animal",
+        })
     })
 })
 //// End create animal endpoint
