@@ -1,7 +1,7 @@
 // This file should import all models and expose the selected database providers models as an export
 
 // Change to either "mysql" or "mdb" to select database backend
-const databaseBackend = "mdb"
+const databaseBackend = "mysql"
 
 let models = {}
 

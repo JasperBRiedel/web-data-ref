@@ -19,7 +19,7 @@ animalController.get("/animals", validate({ body: getAnimalListSchema }), async 
 
     res.status(200).json({
         status: 200,
-        message: "Get all animals - Not yet implemented",
+        message: "Get all animals",
         animals: animals,
     })
 })
