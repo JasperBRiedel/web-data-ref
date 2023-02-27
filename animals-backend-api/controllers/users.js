@@ -34,7 +34,6 @@ userController.post(
             .then(user => {
                 if (bcrypt.compareSync(loginData.password, user.password)) {
                     user.authenticationKey = uuid4().toString()
-                    console.log(user.authenticationKey)
 
                     models.userModel.update(user).then(result => {
                         res.status(200).json({
@@ -166,7 +165,6 @@ userController.get(
     validate({ params: getUserByAuthenticationKeySchema }),
     (req, res) => {
         const authenticationKey = req.params.authenticationKey
-        console.log(authenticationKey)
 
         models.userModel.getByAuthenticationKey(authenticationKey).then(user => {
             res.status(200).json({

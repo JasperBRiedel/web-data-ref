@@ -1,4 +1,15 @@
+import { useNavigate } from "react-router-dom"
+import { useAuthentication } from "../hooks/authentication"
+
 export default function Nav() {
+    const [user, login, logout] = useAuthentication()
+    const navigate = useNavigate()
+
+    function onLogoutClick(e) {
+        logout()
+        navigate("/")
+    }
+
     return <div className="flex flex-row items-baseline">
         <a className="btn btn-ghost normal-case text-xl m-2">Animal Spotting</a>
         <div className="navbar flex md:justify-start">
@@ -13,8 +24,8 @@ export default function Nav() {
             <div className="navbar-end">
 
                 <ul className="menu menu-horizontal px-1">
-                    <li><a>User</a></li>
-                    <li><a>Logout</a></li>
+                    <li><a>{user ? user.firstName : "User"}</a></li>
+                    <li><a onClick={onLogoutClick}>Logout</a></li>
                 </ul>
             </div>
         </div>
