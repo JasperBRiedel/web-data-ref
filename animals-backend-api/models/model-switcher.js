@@ -7,7 +7,8 @@ let models = {}
 
 if (databaseBackend == "mysql") {
     models = {
-        animalModel: await import("./animal-sql.js")
+        animalModel: await import("./animal-sql.js"),
+        userModel: await import("./user-sql.js")
     }
 } else if (databaseBackend == "mdb") {
     models = {
