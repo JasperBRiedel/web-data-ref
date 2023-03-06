@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAuthentication } from "../hooks/authentication"
 
 export default function Nav() {
@@ -14,16 +14,17 @@ export default function Nav() {
         <a className="btn btn-ghost normal-case text-xl m-2">Animal Spotting</a>
         <div className="navbar flex md:justify-start">
             <div className="navbar-start">
-
+                {/* 
                 <ul className="menu menu-horizontal px-1">
                     <li><a>Sightings</a></li>
                     <li><a>Animals</a></li>
                     <li><a>Users</a></li>
-                </ul>
+                </ul> */}
             </div>
             <div className="navbar-end">
 
                 <ul className="menu menu-horizontal px-1">
+                    <li><Link to="/animals">Animals</Link></li>
                     <li><a>{user ? user.firstName : "User"}</a></li>
                     <li><a onClick={onLogoutClick}>Logout</a></li>
                 </ul>

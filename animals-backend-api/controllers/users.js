@@ -292,6 +292,7 @@ userController.patch(
 
         // Convert the user data into a User model object
         const user = User(
+            userData.id,
             userData.email,
             userData.password,
             userData.role,

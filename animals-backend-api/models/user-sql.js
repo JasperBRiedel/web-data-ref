@@ -6,7 +6,7 @@ export async function getAll() {
 
     return await allUserResults.map((userResult) =>
         User(
-            userResult.id,
+            userResult.id.toString(),
             userResult.email,
             userResult.password,
             userResult.role,
@@ -25,7 +25,7 @@ export async function getByID(userID) {
         const userResult = userResults[0]
         return Promise.resolve(
             User(
-                userResult.id,
+                userResult.id.toString(),
                 userResult.email,
                 userResult.password,
                 userResult.role,
@@ -48,7 +48,7 @@ export async function getByEmail(email) {
         const userResult = userResults[0]
         return Promise.resolve(
             User(
-                userResult.id,
+                userResult.id.toString(),
                 userResult.email,
                 userResult.password,
                 userResult.role,
@@ -71,7 +71,7 @@ export async function getByAuthenticationKey(authenticationKey) {
         const userResult = userResults[0]
         return Promise.resolve(
             User(
-                userResult.id,
+                userResult.id.toString(),
                 userResult.email,
                 userResult.password,
                 userResult.role,

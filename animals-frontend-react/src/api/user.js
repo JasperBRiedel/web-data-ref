@@ -39,6 +39,22 @@ export async function logout(authenticationKey) {
     return APIResponseObject
 }
 
+export async function getByID(userID) {
+    const response = await fetch(
+        API_URL + "/users/" + userID,
+        {
+            method: "GET",
+            headers: {
+                'Content-Type': "application/json"
+            },
+        }
+    )
+
+    const APIResponseObject = await response.json()
+
+    return APIResponseObject.user
+}
+
 export async function getByAuthenticationKey(authenticationKey) {
     const response = await fetch(
         API_URL + "/users/by-key/" + authenticationKey,
@@ -53,4 +69,21 @@ export async function getByAuthenticationKey(authenticationKey) {
     const APIResponseObject = await response.json()
 
     return APIResponseObject.user
+}
+
+export async function update(user) {
+    const response = await fetch(
+        API_URL + "/users",
+        {
+            method: "PATCH",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify(user)
+        }
+    )
+
+    const patchUserResult = await response.json()
+
+    return patchUserResult
 }
