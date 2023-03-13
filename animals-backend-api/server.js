@@ -28,10 +28,14 @@ import docsRouter from "./middleware/swagger-doc.js"
 app.use(docsRouter)
 
 // Import and use the routers of each controller.
-import animalsController from "./controllers/animals.js"
-app.use(animalsController)
-import usersController from "./controllers/users.js"
-app.use(usersController)
+import animalController from "./controllers/animals.js"
+app.use(animalController)
+import userController from "./controllers/users.js"
+app.use(userController)
+import trailController from "./controllers/trails.js"
+app.use(trailController)
+import sightingController from "./controllers/sightings.js"
+app.use(sightingController)
 
 // Enable JSON validation error middleware
 //

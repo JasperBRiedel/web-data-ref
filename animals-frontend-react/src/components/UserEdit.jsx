@@ -30,7 +30,7 @@ export default function UserEdit({ userID }) {
     }
 
     return <div>
-        <form className="flex-grow m-4 max-w-lg" onSubmit={saveUser} >
+        <form className="flex-grow m-4 max-w-2xl" onSubmit={saveUser} >
             <div className="form-control">
                 <label className="label">
                     <span className="label-text">First Name</span>
