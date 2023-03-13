@@ -4,7 +4,7 @@ import { getAllTrails } from "../api/trails"
 import { createSighting } from "../api/sightings"
 import { useAuthentication } from "../hooks/authentication"
 
-export function SightingAdd() {
+export function SightingAdd({ onAdded }) {
     const [user, login, logout] = useAuthentication()
 
     const [formData, setFormData] = useState({
@@ -45,6 +45,10 @@ export function SightingAdd() {
                 time: "",
                 date: "",
             })
+
+            if (typeof onAdded === "function") {
+                onAdded()
+            }
         })
     }
 

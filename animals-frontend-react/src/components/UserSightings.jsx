@@ -4,7 +4,7 @@ import { getUserSightings } from "../api/sightings"
 import { getTrailByID } from "../api/trails"
 import Spinner from "./Spinner"
 
-export default function UserSightings({ userID }) {
+export default function UserSightings({ userID, refreshDependency }) {
     const [sightings, setSightings] = useState([])
     const [loading, setLoading] = useState(true)
 
@@ -26,7 +26,7 @@ export default function UserSightings({ userID }) {
             setSightings(sightingsWithExtras)
             setLoading(false)
         })
-    }, [])
+    }, [refreshDependency])
 
     return loading
         ? <Spinner />
