@@ -1,6 +1,5 @@
 import express from "express"
 import cors from "cors"
-
 import { validateErrorMiddleware } from "./middleware/validator.js"
 
 // Create express application
