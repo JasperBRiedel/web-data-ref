@@ -102,7 +102,7 @@ const getUserListSchema = {
 userController.get(
     "/users",
     [
-        auth(["admin"]),
+        // auth(["admin"]),
         validate({ body: getUserListSchema }),
     ],
     async (req, res) => {
@@ -273,7 +273,7 @@ const updateUserSchema = {
             type: "string"
         },
         authenticationKey: {
-            type: "string"
+            type: ["string", "null"]
         },
     }
 }

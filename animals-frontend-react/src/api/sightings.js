@@ -20,7 +20,7 @@ export async function getAllSightings() {
 export async function getTopSightings(amount) {
     // GET from the API /sightings
     const response = await fetch(
-        API_URL + "/sightings/" + amount,
+        API_URL + "/sightings/top/" + amount,
         {
             method: "GET",
             headers: {
@@ -54,7 +54,7 @@ export async function getUserSightings(userID) {
 export async function getSightingByID(sightingID) {
     // GET from the API /sighting/:id
     const response = await fetch(
-        API_URL + "/sightings/" + trailID,
+        API_URL + "/sightings/" + sightingID,
         {
             method: "GET",
             headers: {

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { getAllAnimals } from "../api/animal";
+import { getAllTrails } from "../api/trails";
 import Nav from "../components/Nav";
 import { XMLUpload } from "../components/XMLUpload";
 
-export default function Animals() {
-    const [animals, setAnimals] = useState([])
+export default function Trails() {
+    const [trails, setTrails] = useState([])
     useEffect(() => {
-        getAllAnimals().then(animals => setAnimals(animals))
+        getAllTrails().then(trails => setTrails(trails))
     }, [])
 
     return <>
@@ -17,14 +17,14 @@ export default function Animals() {
                 <div className="overflow-x-auto">
                     <table className="table table-compact w-full">
                         <thead>
+                            <th>ID</th>
                             <th>Name</th>
-                            <th>Species</th>
                         </thead>
                         <tbody>
-                            {animals.map(animal =>
-                                <tr key={animal.id}>
-                                    <td>{animal.name}</td>
-                                    <td>{animal.species}</td>
+                            {trails.map(trail =>
+                                <tr key={trail.id}>
+                                    <td>{trail.id}</td>
+                                    <td>{trail.name}</td>
                                 </tr>
                             )}
                         </tbody>
@@ -32,7 +32,7 @@ export default function Animals() {
                 </div>
             </div>
             <div className="rounded border-2 border-primary  min-h-16 p-2">
-                <h2 className="text-center">Upload Animals</h2>
+                <h2 className="text-center">Upload Trails</h2>
                 <XMLUpload />
             </div>
         </div>

@@ -2,7 +2,7 @@ import { db } from "../database/mysql.js";
 import { User } from "./user.js";
 
 export async function getAll() {
-    const allUserResults = await db.query("SELECT * FROM users")
+    const [allUserResults] = await db.query("SELECT * FROM users")
 
     return await allUserResults.map((userResult) =>
         User(

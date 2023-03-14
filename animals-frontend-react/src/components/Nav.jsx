@@ -27,10 +27,11 @@ export default function Nav() {
                     user && (user.role == "admin" || user.role == "moderator")
                         ? <>
                             <li><Link to="/animals">Animals</Link></li>
-                            <li><Link to="/tails">Trails</Link></li>
+                            <li><Link to="/trails">Trails</Link></li>
                         </>
                         : <></>
                 }
+                <li><Link to="/sightings">Sightings</Link></li>
                 <li><Link to="/dashboard">{userName}</Link></li>
                 <li><a onClick={onLogoutClick}>Logout</a></li>
             </ul>

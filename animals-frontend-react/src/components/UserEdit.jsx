@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { getByID, update } from "../api/user"
+import { getUserByID, update } from "../api/user"
 
-export default function UserEdit({ userID }) {
+export default function UserEdit({ userID, onSave }) {
     const [formData, setFormData] = useState({
         id: null,
         firstName: "",
@@ -15,7 +15,7 @@ export default function UserEdit({ userID }) {
 
     useEffect(() => {
         if (userID) {
-            getByID(userID).then(user => {
+            getUserByID(userID).then(user => {
                 setFormData(user)
             })
         }
@@ -26,6 +26,10 @@ export default function UserEdit({ userID }) {
         setStatusMessage("Saving...")
         update(formData).then(result => {
             setStatusMessage(result.message)
+
+            if (typeof onSave === "function") {
+                onSave()
+            }
         })
     }
 

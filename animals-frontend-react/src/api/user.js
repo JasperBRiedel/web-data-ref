@@ -39,7 +39,24 @@ export async function logout(authenticationKey) {
     return APIResponseObject
 }
 
-export async function getByID(userID) {
+export async function getAllUsers() {
+    // GET from the API /users
+    const response = await fetch(
+        API_URL + "/users",
+        {
+            method: "GET",
+            headers: {
+                'Content-Type': "application/json"
+            },
+        }
+    )
+
+    const APIResponseObject = await response.json()
+
+    return APIResponseObject.users
+}
+
+export async function getUserByID(userID) {
     const response = await fetch(
         API_URL + "/users/" + userID,
         {

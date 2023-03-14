@@ -38,7 +38,7 @@ const getTopSightingsListSchema = {
 }
 
 sightingController.get(
-    "/sightings/:amount",
+    "/sightings/top/:amount",
     validate({ params: getTopSightingsListSchema }),
     async (req, res) => {
         // #swagger.summary = 'Get a collection of top sightings'

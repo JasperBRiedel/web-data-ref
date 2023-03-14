@@ -1,8 +1,11 @@
 import { createBrowserRouter } from "react-router-dom"
-import AnimalCRUD from "./pages/AnimalCRUD"
 import Animals from "./pages/Animals"
 import Dashboard from "./pages/Dashboard"
 import Login from "./pages/Login"
+import SightingInfo from "./pages/SightingInfo"
+import Sightings from "./pages/Sightings"
+import Trails from "./pages/Trails"
+import UserCRUD from "./pages/UserCRUD"
 
 const router = createBrowserRouter([
     {
@@ -18,8 +21,20 @@ const router = createBrowserRouter([
         element: <Animals />
     },
     {
-        path: "/animal-crud",
-        element: <AnimalCRUD />
+        path: "/trails",
+        element: <Trails />
+    },
+    {
+        path: "/sightings",
+        element: <Sightings />
+    },
+    {
+        path: "/sightings/:sightingID",
+        element: <SightingInfo />
+    },
+    {
+        path: "/users",
+        element: <UserCRUD />
     }
 ])
 
