@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getAllUsers, getUserByID } from "../api/user"
+import { getAllUsers } from "../api/user"
 import Nav from "../components/Nav"
 import Spinner from "../components/Spinner"
 import UserEdit from "../components/UserEdit"
@@ -50,7 +50,10 @@ export default function UserCRUD() {
             </div>
             <div className="rounded border-2 border-primary p-2">
                 <h2>Selected User</h2>
-                <UserEdit userID={selectedUserID} onSave={() => setRefreshTrigger({})} />
+                <UserEdit
+                    userID={selectedUserID}
+                    onSave={() => setRefreshTrigger({})}
+                    allowEditRole={true} />
 
             </div>
         </div >

@@ -22,7 +22,7 @@ function Dashboard() {
                 <div className="rounded border-2 border-primary md:col-start-1 min-h-16 p-2">
                     <h2 className="text-center">My Account</h2>
                     {/* User details form with update button here */}
-                    <UserEdit userID={user.id} />
+                    <UserEdit userID={user.id} allowEditRole={user.role == "admin"} />
                 </div>
                 <div className="rounded border-2 border-primary md:col-start-2 md:row-start-1 row-end-3 p-2">
                     <h2 className="text-center">My Sightings</h2>

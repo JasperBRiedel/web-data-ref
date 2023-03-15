@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom"
 import Animals from "./pages/Animals"
 import Dashboard from "./pages/Dashboard"
 import Login from "./pages/Login"
+import Register from "./pages/Register"
 import SightingInfo from "./pages/SightingInfo"
 import Sightings from "./pages/Sightings"
 import Trails from "./pages/Trails"
@@ -35,6 +36,11 @@ const router = createBrowserRouter([
     {
         path: "/users",
         element: <UserCRUD />
+    },
+    {
+        path: "/register",
+        element: <Register />
+
     }
 ])
 

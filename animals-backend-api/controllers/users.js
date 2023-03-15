@@ -249,6 +249,67 @@ userController.post(
     }
 )
 
+//// Register user endpoint
+const registerUserSchema = {
+    type: "object",
+    required: [
+        "email",
+        "password",
+        "firstName",
+        "lastName",
+    ],
+    properties: {
+        email: {
+            type: "string"
+        },
+        password: {
+            type: "string"
+        },
+        firstName: {
+            type: "string"
+        },
+        lastName: {
+            type: "string"
+        },
+    }
+}
+userController.post(
+    "/users/register",
+    validate({ body: registerUserSchema }),
+    (req, res) => {
+        // Get the user data out of the request
+        const userData = req.body
+
+        // hash the password 
+        userData.password = bcrypt.hashSync(userData.password);
+
+        // Convert the user data into an User model object
+        const user = User(
+            null,
+            userData.email,
+            userData.password,
+            "spotter",
+            userData.firstName,
+            userData.lastName,
+            null
+        )
+
+        // Use the create model function to insert this user into the DB
+        models.userModel.create(user).then(user => {
+            res.status(200).json({
+                status: 200,
+                message: "Registration successful",
+                user: user
+            })
+        }).catch(error => {
+            res.status(500).json({
+                status: 500,
+                message: "Registration failed",
+            })
+        })
+    }
+)
+
 //// Update user endpoint
 const updateUserSchema = {
     type: "object",

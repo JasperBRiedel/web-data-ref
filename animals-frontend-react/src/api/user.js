@@ -104,3 +104,20 @@ export async function update(user) {
 
     return patchUserResult
 }
+
+export async function registerUser(user) {
+    const response = await fetch(
+        API_URL + "/users/register",
+        {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify(user)
+        }
+    )
+
+    const patchUserResult = await response.json()
+
+    return patchUserResult
+}

@@ -32,6 +32,7 @@ const getTopSightingsListSchema = {
     required: ["amount"],
     properties: {
         amount: {
+            type: "string",
             pattern: "^[0-9]+$"
         }
     }

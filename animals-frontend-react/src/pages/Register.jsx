@@ -1,43 +1,55 @@
-import { useEffect, useState } from "react"
-import { getUserByID, update } from "../api/user"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useAuthentication } from "../hooks/authentication"
+import { registerUser } from "../api/user"
 
-export default function UserEdit({ userID, onSave, allowEditRole }) {
-    const [formData, setFormData] = useState({
-        id: null,
-        firstName: "",
-        lastName: "",
-        role: "",
-        email: "",
-        password: "",
-        authenticationKey: null,
-    })
+export default function Register() {
+    const navigate = useNavigate()
+
+    const [user, login, logout] = useAuthentication()
+
     const [statusMessage, setStatusMessage] = useState("")
 
-    useEffect(() => {
-        if (userID) {
-            getUserByID(userID).then(user => {
-                setFormData(user)
-            })
-        }
-    }, [userID])
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+    })
 
-    function saveUser(e) {
+    function onRegisterSubmit(e) {
         e.preventDefault()
-        setStatusMessage("Saving...")
-        update(formData).then(result => {
-            setStatusMessage(result.message)
+        setStatusMessage("Registering...")
 
-            if (typeof onSave === "function") {
-                onSave()
-            }
-        })
+        if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-zA-Z0-9]+$/.test(formData.email)) {
+            setStatusMessage("Invalid email address")
+            return
+        }
+
+        // TODO: Add validation for other fields
+
+        // Register then attempt login
+        registerUser(formData)
+            .then(result => {
+                setStatusMessage(result.message)
+                login(formData.email, formData.password)
+                    .then(result => {
+                        setStatusMessage(result.message)
+                        navigate("/dashboard")
+                    })
+                    .catch(error => {
+                        setStatusMessage("Login failed: " + error)
+                    })
+            })
     }
 
-    return <div>
-        <form className="flex-grow m-4 max-w-2xl" onSubmit={saveUser} >
+    return <div className="flex justify-evenly items-center w-full">
+        <form className="flex-grow m-4 max-w-lg" onSubmit={onRegisterSubmit}>
+            <h1 className="text-4xl text-center mb-8">Animal Spotting App</h1>
+            <h2 className="text-3xl text-center mb-8">Register Account</h2>
             <div className="form-control">
                 <label className="label">
-                    <span className="label-text">First Name</span>
+                    <span className="label-text">First Name:</span>
                 </label>
                 <input
                     type="text"
@@ -49,7 +61,7 @@ export default function UserEdit({ userID, onSave, allowEditRole }) {
             </div>
             <div className="form-control">
                 <label className="label">
-                    <span className="label-text">Last Name</span>
+                    <span className="label-text">Last Name:</span>
                 </label>
                 <input
                     type="text"
@@ -58,22 +70,6 @@ export default function UserEdit({ userID, onSave, allowEditRole }) {
                     value={formData.lastName}
                     onChange={(e) => setFormData(existing => { return { ...existing, lastName: e.target.value } })}
                 />
-            </div>
-            <div className="form-control">
-                <label className="label">
-                    <span className="label-text">Role</span>
-                </label>
-                <select
-                    className="select select-bordered"
-                    value={formData.role}
-                    onChange={(e) => setFormData(existing => { return { ...existing, role: e.target.value } })}
-                    disabled={!allowEditRole}
-                >
-                    <option disabled selected>Pick one</option>
-                    <option value="admin">Admin</option>
-                    <option value="moderator">Moderator</option>
-                    <option value="spotter">Spotter</option>
-                </select>
             </div>
             <div className="form-control">
                 <label className="label">
@@ -100,7 +96,10 @@ export default function UserEdit({ userID, onSave, allowEditRole }) {
                 />
             </div>
             <div className="my-2">
-                <button className="btn btn-primary mr-2" >Save</button>
+                <button className="btn btn-primary mr-2" >Register</button>
+                <button
+                    className="btn btn-secondary"
+                    onClick={() => navigate("/")}>Back</button>
                 <label className="label">
                     <span className="label-text-alt">{statusMessage}</span>
                 </label>

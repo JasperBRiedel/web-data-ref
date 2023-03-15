@@ -89,6 +89,7 @@ function Login() {
         <div className="divider divider-horizontal h-screen mx-0 hidden md:flex"></div>
         <form className="flex-grow m-4 max-w-lg" onSubmit={onLoginSubmit}>
             <h2 className="text-4xl text-center mb-8">Animal Spotting App</h2>
+            <h2 className="text-3xl text-center mb-8">Login</h2>
             <div className="form-control">
                 <label className="label">
                     <span className="label-text">Email</span>
@@ -115,7 +116,9 @@ function Login() {
             </div>
             <div className="my-2">
                 <button className="btn btn-primary mr-2" >Login</button>
-                <button className="btn btn-secondary">Sign up</button>
+                <button
+                    className="btn btn-secondary"
+                    onClick={() => navigate("/register")}>Sign up</button>
                 <label className="label">
                     <span className="label-text-alt">{statusMessage}</span>
                 </label>
