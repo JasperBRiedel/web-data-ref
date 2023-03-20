@@ -25,7 +25,34 @@ sightingController.get("/sightings", validate({ body: getSightingListSchema }), 
     })
 })
 //// End get sighting list endpoint
-//
+
+//// Get paginated sighting list endpoint
+const getPaginatedSightingListSchema = {
+    type: "object",
+    required: ["page"],
+    properties: {
+        page: {
+            type: "integer",
+            minimum: 0,
+        }
+    }
+}
+
+sightingController.get("/sightings/paged/:page", validate({ params: getSightingListSchema }), async (req, res) => {
+    // #swagger.summary = 'Get a collection of sightings in pages'
+    const pageSize = 5;
+    const page = parseInt(req.params.page);
+
+    const sightings = await models.sightingModel.getByPage(page, pageSize);
+
+    res.status(200).json({
+        status: 200,
+        message: "Get paginated sightings on page " + page,
+        sightings: sightings,
+    })
+})
+//// End get paginated sighting list endpoint
+
 //// Get top sightings list endpoint
 const getTopSightingsListSchema = {
     type: "object",

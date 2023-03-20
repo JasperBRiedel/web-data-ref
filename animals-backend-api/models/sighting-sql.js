@@ -16,6 +16,25 @@ export async function getAll() {
         ))
 }
 
+export async function getByPage(page, size) {
+    const offset = page * size
+    // Get the collection of sightings on a given "page"
+    const [paginatedSightingResults] = await db.query(
+        "SELECT * FROM sightings LIMIT ?, ?",
+        [offset, size]
+    )
+    // Convert the collection of results into a list of Sighting objects
+    return await paginatedSightingResults.map((sightingResult) =>
+        Sighting(
+            sightingResult.id,
+            sightingResult.trail_id,
+            sightingResult.animal_id,
+            sightingResult.user_id,
+            sightingResult.date,
+            sightingResult.time
+        ))
+}
+
 export async function getTop(amount) {
     // Get the collection of all sightings
     const [allSightingsResults] = await db.query(
