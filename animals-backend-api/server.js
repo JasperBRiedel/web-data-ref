@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import { validateErrorMiddleware } from "./middleware/validator.js"
+import fileUpload from "express-fileupload"
 
 // Create express application
 const port = 8080
@@ -21,6 +22,11 @@ app.use(cors({
 // the request object, which you can access in your route endpoints,
 // or other general middleware.
 app.use(express.json())
+
+// Enable file upload support
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+}))
 
 // Import and enable swagger documentation pages
 import docsRouter from "./middleware/swagger-doc.js"

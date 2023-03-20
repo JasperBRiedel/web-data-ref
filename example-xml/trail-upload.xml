@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE trail-upload [
+    <!ELEMENT trail-upload (trails)>
+    <!ATTLIST trail-upload operation (insert|update) "insert">
+    <!ELEMENT trails (trail+)>
+    <!ELEMENT trail (id?, name)>
+    <!ELEMENT id (#PCDATA)>
+    <!ELEMENT name (#PCDATA)>
+]>
+<trail-upload operation="insert">
+    <trails>
+        <trail>
+            <name>Mt Coot-tha - Summit Track</name>
+        </trail>
+        <trail>
+            <name>Mt Coot-tha - Mahogany Trail</name>
+        </trail>
+        <trail>
+            <name>Mt Coot-tha - Simpson Falls Track</name>
+        </trail>
+        <trail>
+            <name>Mt Coot-tha - Gap Creek Circuit</name>
+        </trail>
+    </trails>
+</trail-upload>
+
+<!-- Update version  -->
+<!-- <trail-upload operation="update">
+    <trails>
+        <trail>
+            <id>6</id>
+            <name>Mt Coot-tha - Summit Track</name>
+        </trail>
+        <trail>
+            <id>7</id>
+            <name>Mt Coot-tha - Mahogany Trail</name>
+        </trail>
+        <trail>
+            <id>8</id>
+            <name>Mt Coot-tha - Simpson Falls Track</name>
+        </trail>
+        <trail>
+            <id>9</id>
+            <name>Mt Coot-tha - Gap Creek Circuit</name>
+        </trail>
+    </trails>
+</trail-upload> -->

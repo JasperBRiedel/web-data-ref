@@ -1,8 +1,8 @@
 import { Router } from "express";
-
 import { validate } from "../middleware/validator.js";
-
 import models from "../models/model-switcher.js"
+import xml2js from "xml2js"
+import { Trail } from "../models/trail.js";
 
 const trailController = Router()
 
@@ -53,6 +53,83 @@ trailController.get("/trails/:id", validate({ params: getTrailByIDSchema }), (re
     })
 })
 //// End get trail by ID endpoint
+
+trailController.post("/trails/upload/xml", (req, res) => {
+    if (req.files && req.files["xml-file"]) {
+        // Access the XML file as a string
+        const XMLFile = req.files["xml-file"]
+        const file_text = XMLFile.data.toString()
+
+        // Set up XML parser
+        const parser = new xml2js.Parser();
+        parser.parseStringPromise(file_text)
+            .then(data => {
+                const trailUpload = data["trail-upload"]
+                const trailUploadAttributes = trailUpload["$"]
+                const operation = trailUploadAttributes["operation"]
+                // Slightly painful indexing to reach nested children
+                const trailsData = trailUpload["trails"][0].trail
+
+                if (operation == "insert") {
+                    Promise.all(trailsData.map((trailData) => {
+                        // Convert the xml object into a model object
+                        const trailModel = Trail(null, trailData.name.toString())
+                        // Return the promise of each creation query
+                        return models.trailModel.create(trailModel)
+                    })).then(results => {
+                        res.status(200).json({
+                            status: 200,
+                            message: "XML Upload insert successful",
+                        })
+                    }).catch(error => {
+                        res.status(500).json({
+                            status: 500,
+                            message: "XML upload failed on database operation - " + error,
+                        })
+                    })
+                } else if (operation == "update") {
+                    Promise.all(trailsData.map((trailData) => {
+                        // Convert the xml object into a model object
+                        const trailModel = Trail(
+                            trailData.id.toString(),
+                            trailData.name.toString()
+                        )
+                        // Return the promise of each creation query
+                        return models.trailModel.update(trailModel)
+                    })).then(results => {
+                        res.status(200).json({
+                            status: 200,
+                            message: "XML Upload update successful",
+                        })
+                    }).catch(error => {
+                        res.status(500).json({
+                            status: 500,
+                            message: "XML upload failed on database operation - " + error,
+                        })
+                    })
+
+                } else {
+                    res.status(400).json({
+                        status: 400,
+                        message: "XML Contains invalid operation element value",
+                    })
+                }
+            })
+            .catch(error => {
+                res.status(500).json({
+                    status: 500,
+                    message: "Error parsing XML - " + error,
+                })
+            })
+
+
+    } else {
+        res.status(400).json({
+            status: 400,
+            message: "No file selected",
+        })
+    }
+})
 
 //// Create trail endpoint
 const createTrailSchema = {

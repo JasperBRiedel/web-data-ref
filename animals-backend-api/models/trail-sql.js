@@ -30,7 +30,7 @@ export async function create(trail) {
     delete trail.id
     // Insert trail object and return resulting promise
     return db.query(
-        "INSERT INTO trails (name) VALUES (?",
+        "INSERT INTO trails (name) VALUES (?)",
         [trail.name]
     ).then(([result]) => {
         // Inject the inserted ID into the trail object and return
