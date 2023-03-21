@@ -17,12 +17,21 @@ export async function getAll() {
 }
 
 export async function getByPage(page, size) {
+    // Calculate page offset
     const offset = page * size
+
     // Get the collection of sightings on a given "page"
     const [paginatedSightingResults] = await db.query(
         "SELECT * FROM sightings LIMIT ?, ?",
         [offset, size]
     )
+
+    // MongoDB Equivalent query
+    // db.sightings.find()
+    //     .sort({ _id: 1 })
+    //     .skip(offset)
+    //     .limit(size)
+
     // Convert the collection of results into a list of Sighting objects
     return await paginatedSightingResults.map((sightingResult) =>
         Sighting(
