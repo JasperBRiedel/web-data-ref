@@ -2,7 +2,8 @@ import models from "../models/model-switcher.js"
 
 export default function auth(allowed_roles) {
     return function (req, res, next) {
-        const authenticationKey = req.body.authenticationKey;
+        // Check the body and the query string for an authentication key
+        const authenticationKey = req.body.authenticationKey ?? req.query.authKey
 
         if (authenticationKey) {
 
