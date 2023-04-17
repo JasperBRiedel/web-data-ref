@@ -68,7 +68,7 @@ trailController.post("/trails/upload/xml", (req, res) => {
                 const trailUploadAttributes = trailUpload["$"]
                 const operation = trailUploadAttributes["operation"]
                 // Slightly painful indexing to reach nested children
-                const trailsData = trailUpload["trails"][0].trail
+                const trailsData = trailUpload["trails"][0]["trail"]
 
                 if (operation == "insert") {
                     Promise.all(trailsData.map((trailData) => {
@@ -111,7 +111,7 @@ trailController.post("/trails/upload/xml", (req, res) => {
                 } else {
                     res.status(400).json({
                         status: 400,
-                        message: "XML Contains invalid operation element value",
+                        message: "XML Contains invalid operation attribute value",
                     })
                 }
             })

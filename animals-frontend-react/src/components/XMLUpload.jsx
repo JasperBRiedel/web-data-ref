@@ -10,7 +10,6 @@ export function XMLUpload({ onUploadSuccess }) {
 
     function uploadFile(e) {
         e.preventDefault()
-        setStatusMessage("Not yet implemented")
 
         // Files is an array because the user could select multiple files
         // we choose to upload only the first selected file in this case.
