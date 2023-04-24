@@ -3,15 +3,18 @@ import { getAllUsers } from "../api/user"
 import Nav from "../components/Nav"
 import Spinner from "../components/Spinner"
 import UserEdit from "../components/UserEdit"
+import { useAuthentication } from "../hooks/authentication"
 
-export default function UserCRUD() {
+export default function Users() {
+    const [user] = useAuthentication()
+
     const [refreshTrigger, setRefreshTrigger] = useState()
     const [selectedUserID, setSelectedUserID] = useState(null)
 
     // Load user list
     const [users, setUsers] = useState([])
     useEffect(() => {
-        getAllUsers()
+        getAllUsers(user.authenticationKey)
             .then(users => {
                 setUsers(users)
             })

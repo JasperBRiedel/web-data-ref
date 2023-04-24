@@ -39,10 +39,10 @@ export async function logout(authenticationKey) {
     return APIResponseObject
 }
 
-export async function getAllUsers() {
+export async function getAllUsers(authenticationKey) {
     // GET from the API /users
     const response = await fetch(
-        API_URL + "/users",
+        API_URL + "/users?authKey=" + authenticationKey,
         {
             method: "GET",
             headers: {
@@ -56,9 +56,9 @@ export async function getAllUsers() {
     return APIResponseObject.users
 }
 
-export async function getUserByID(userID) {
+export async function getUserByID(userID, authenticationKey) {
     const response = await fetch(
-        API_URL + "/users/" + userID,
+        API_URL + "/users/" + userID + "?authKey=" + authenticationKey,
         {
             method: "GET",
             headers: {
@@ -88,7 +88,7 @@ export async function getByAuthenticationKey(authenticationKey) {
     return APIResponseObject.user
 }
 
-export async function update(user) {
+export async function update(user, authenticationKey) {
     const response = await fetch(
         API_URL + "/users",
         {
@@ -96,7 +96,7 @@ export async function update(user) {
             headers: {
                 'Content-Type': "application/json"
             },
-            body: JSON.stringify(user)
+            body: JSON.stringify({ user, authenticationKey })
         }
     )
 

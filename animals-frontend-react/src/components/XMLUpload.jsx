@@ -1,7 +1,10 @@
 import { useRef, useState } from "react"
 import { API_URL } from "../api/api"
+import { useAuthentication } from "../hooks/authentication";
 
 export function XMLUpload({ onUploadSuccess }) {
+    const [user] = useAuthentication()
+
     const [statusMessage, setStatusMessage] = useState("")
 
     // useRef is the react way of getting an element reference like below:
@@ -20,7 +23,7 @@ export function XMLUpload({ onUploadSuccess }) {
         const formData = new FormData()
         formData.append("xml-file", file)
 
-        fetch(API_URL + "/trails/upload/xml",
+        fetch(API_URL + "/trails/upload/xml?authKey=" + user.authenticationKey,
             {
                 method: "POST",
                 body: formData,

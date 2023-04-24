@@ -37,7 +37,7 @@ export function SightingAdd({ onAdded }) {
             user_id: user.id,
         }
 
-        createSighting(sightingData).then(result => {
+        createSighting(sightingData, user.authenticationKey).then(result => {
             setStatusMessage(result.message)
             setFormData({
                 animal_id: "",

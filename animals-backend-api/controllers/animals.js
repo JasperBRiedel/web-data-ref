@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { validate } from "../middleware/validator.js";
+import auth from "../middleware/auth.js";
 
 import models from "../models/model-switcher.js"
 
@@ -68,7 +69,10 @@ const createAnimalSchema = {
     }
 }
 
-animalController.post("/animals/", validate({ body: createAnimalSchema }), (req, res) => {
+animalController.post("/animals/", [
+    auth(["admin", "moderator"]),
+    validate({ body: createAnimalSchema })
+], (req, res) => {
     // #swagger.summary = 'Create a specific animal'
     /* #swagger.requestBody = {
             description: 'Adding new user.',
@@ -126,7 +130,10 @@ const updateAnimalSchema = {
     }
 }
 
-animalController.patch("/animals/", validate({ body: updateAnimalSchema }), (req, res) => {
+animalController.patch("/animals/", [
+    auth(["admin", "moderator"]),
+    validate({ body: updateAnimalSchema })
+], (req, res) => {
     // #swagger.summary = 'Update a specific animal by ID'
     const animal = req.body
 
@@ -148,7 +155,10 @@ const deleteAnimalSchema = {
     }
 }
 
-animalController.delete("/animals/", validate({ body: deleteAnimalSchema }), (req, res) => {
+animalController.delete("/animals/", [
+    auth(["admin", "moderator"]),
+    validate({ body: deleteAnimalSchema })
+], (req, res) => {
     // #swagger.summary = 'Delete a specific animal by name'
     const animalID = req.body.id
 

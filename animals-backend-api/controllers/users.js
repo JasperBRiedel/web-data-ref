@@ -23,8 +23,7 @@ const postUserLoginSchema = {
     }
 }
 
-userController.post(
-    "/users/login",
+userController.post("/users/login",
     validate({ body: postUserLoginSchema }),
     (req, res) => {
         // access request body
@@ -69,8 +68,7 @@ const postUserLogoutSchema = {
     }
 }
 
-userController.post(
-    "/users/logout",
+userController.post("/users/logout",
     validate({ body: postUserLogoutSchema }),
     (req, res) => {
         const authenticationKey = req.body.authenticationKey
@@ -99,22 +97,19 @@ const getUserListSchema = {
     properties: {}
 }
 
-userController.get(
-    "/users",
-    [
-        // auth(["admin"]),
-        validate({ body: getUserListSchema }),
-    ],
-    async (req, res) => {
+userController.get("/users", [
+    auth(["admin"]),
+    validate({ body: getUserListSchema }),
+], async (req, res) => {
 
-        const users = await models.userModel.getAll()
+    const users = await models.userModel.getAll()
 
-        res.status(200).json({
-            status: 200,
-            message: "User list",
-            users: users,
-        })
-    }
+    res.status(200).json({
+        status: 200,
+        message: "User list",
+        users: users,
+    })
+}
 )
 
 //// Get user by ID endpoint
@@ -128,25 +123,28 @@ const getUserByIDSchema = {
     }
 }
 
-userController.get(
-    "/users/:id",
-    validate({ params: getUserByIDSchema }),
-    (req, res) => {
-        const userID = req.params.id
+userController.get("/users/:id", [
+    auth(["admin", "moderator", "spotter"]),
+    validate({ params: getUserByIDSchema })
+], (req, res) => {
+    const userID = req.params.id
 
-        models.userModel.getByID(userID).then(user => {
-            res.status(200).json({
-                status: 200,
-                message: "Get user by ID",
-                user: user,
-            })
-        }).catch(error => {
-            res.status(500).json({
-                status: 500,
-                message: "Failed to get user by ID",
-            })
+    // TODO: Enforce that moderator and spotter users
+    // can only get them selves. 
+
+    models.userModel.getByID(userID).then(user => {
+        res.status(200).json({
+            status: 200,
+            message: "Get user by ID",
+            user: user,
         })
-    }
+    }).catch(error => {
+        res.status(500).json({
+            status: 500,
+            message: "Failed to get user by ID",
+        })
+    })
+}
 )
 
 //// Get user by authentication key endpoint
@@ -160,8 +158,7 @@ const getUserByAuthenticationKeySchema = {
     }
 }
 
-userController.get(
-    "/users/by-key/:authenticationKey",
+userController.get("/users/by-key/:authenticationKey",
     validate({ params: getUserByAuthenticationKeySchema }),
     (req, res) => {
         const authenticationKey = req.params.authenticationKey
@@ -210,43 +207,43 @@ const createUserSchema = {
     }
 }
 
-userController.post(
-    "/users",
-    validate({ body: createUserSchema }),
-    (req, res) => {
-        // Get the user data out of the request
-        const userData = req.body
+userController.post("/users", [
+    auth(["admin"]),
+    validate({ body: createUserSchema })
+], (req, res) => {
+    // Get the user data out of the request
+    const userData = req.body
 
-        // hash the password if it isn't already hashed
-        if (!userData.password.startsWith("$2a")) {
-            userData.password = bcrypt.hashSync(userData.password);
-        }
-
-        // Convert the user data into an User model object
-        const user = User(
-            null,
-            userData.email,
-            userData.password,
-            userData.role,
-            userData.firstName,
-            userData.lastName,
-            null
-        )
-
-        // Use the create model function to insert this user into the DB
-        models.userModel.create(user).then(user => {
-            res.status(200).json({
-                status: 200,
-                message: "Created user",
-                user: user
-            })
-        }).catch(error => {
-            res.status(500).json({
-                status: 500,
-                message: "Failed to create user",
-            })
-        })
+    // hash the password if it isn't already hashed
+    if (!userData.password.startsWith("$2a")) {
+        userData.password = bcrypt.hashSync(userData.password);
     }
+
+    // Convert the user data into an User model object
+    const user = User(
+        null,
+        userData.email,
+        userData.password,
+        userData.role,
+        userData.firstName,
+        userData.lastName,
+        null
+    )
+
+    // Use the create model function to insert this user into the DB
+    models.userModel.create(user).then(user => {
+        res.status(200).json({
+            status: 200,
+            message: "Created user",
+            user: user
+        })
+    }).catch(error => {
+        res.status(500).json({
+            status: 500,
+            message: "Failed to create user",
+        })
+    })
+}
 )
 
 //// Register user endpoint
@@ -313,69 +310,83 @@ userController.post(
 //// Update user endpoint
 const updateUserSchema = {
     type: "object",
-    required: ["id"],
+    required: ["user"],
     properties: {
-        id: {
-            type: "string"
-        },
-        email: {
-            type: "string"
-        },
-        password: {
-            type: "string"
-        },
-        role: {
-            type: "string"
-        },
-        firstName: {
-            type: "string"
-        },
-        lastName: {
-            type: "string"
-        },
-        authenticationKey: {
-            type: ["string", "null"]
-        },
+        user: {
+            type: "object",
+            properties: {
+                id: {
+                    type: "string"
+                },
+                email: {
+                    type: "string"
+                },
+                password: {
+                    type: "string"
+                },
+                role: {
+                    type: "string"
+                },
+                firstName: {
+                    type: "string"
+                },
+                lastName: {
+                    type: "string"
+                },
+                authenticationKey: {
+                    type: ["string", "null"]
+                },
+            }
+        }
     }
 }
 
-userController.patch(
-    "/users",
-    validate({ body: updateUserSchema }),
-    async (req, res) => {
-        // Get the user data out of the request
-        const userData = req.body
+userController.patch("/users", [
+    auth(["admin", "moderator", "spotter"]),
+    validate({ body: updateUserSchema })
+], async (req, res) => {
+    // Get the user data out of the request
+    //
+    // Note - the user data being updated is encapsulated in a user
+    // object to avoid ambiguity between the logged in user's
+    // authentication key and the authentication key of the user
+    // currently being updated.
+    const userData = req.body.user
 
-        // hash the password if it isn't already hashed
-        if (userData.password && !userData.password.startsWith("$2a")) {
-            userData.password = await bcrypt.hash(userData.password);
-        }
+    // TODO: Enforce that moderators and spotters can only
+    // update their own user records.  
 
-        // Convert the user data into a User model object
-        const user = User(
-            userData.id,
-            userData.email,
-            userData.password,
-            userData.role,
-            userData.firstName,
-            userData.lastName,
-            userData.authenticationKey
-        )
+    // hash the password if it isn't already hashed
+    if (userData.password && !userData.password.startsWith("$2a")) {
+        userData.password = await bcrypt.hash(userData.password);
+    }
 
-        // Use the update model function to update this user in the DB
-        models.userModel.update(user).then(user => {
-            res.status(200).json({
-                status: 200,
-                message: "Updated user",
-                user: user
-            })
-        }).catch(error => {
-            res.status(500).json({
-                status: 500,
-                message: "Failed to update user",
-            })
+    // Convert the user data into a User model object
+    const user = User(
+        userData.id,
+        userData.email,
+        userData.password,
+        userData.role,
+        userData.firstName,
+        userData.lastName,
+        userData.authenticationKey
+    )
+
+    // Use the update model function to update this user in the DB
+    models.userModel.update(user).then(user => {
+        res.status(200).json({
+            status: 200,
+            message: "Updated user",
+            user: user
+        })
+    }).catch(error => {
+        console.log(error)
+        res.status(500).json({
+            status: 500,
+            message: "Failed to update user",
         })
     })
+})
 
 //// Delete user by ID endpoint
 const deleteUserByIDSchema = {
@@ -387,24 +398,24 @@ const deleteUserByIDSchema = {
     }
 }
 
-userController.delete(
-    "/users/:id",
-    validate({ params: deleteUserByIDSchema }),
-    (req, res) => {
-        const userID = req.params.id
+userController.delete("/users/:id", [
+    auth(["admin"]),
+    validate({ params: deleteUserByIDSchema })
+], (req, res) => {
+    const userID = req.params.id
 
-        models.userController.deleteById(userID).then(result => {
-            res.status(200).json({
-                status: 200,
-                message: "User deleted",
-            })
-        }).catch(error => {
-            res.status(500).json({
-                status: 500,
-                message: "Failed to delete user",
-            })
+    models.userController.deleteById(userID).then(result => {
+        res.status(200).json({
+            status: 200,
+            message: "User deleted",
         })
-    }
+    }).catch(error => {
+        res.status(500).json({
+            status: 500,
+            message: "Failed to delete user",
+        })
+    })
+}
 )
 
 export default userController

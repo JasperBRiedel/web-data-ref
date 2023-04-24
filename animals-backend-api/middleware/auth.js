@@ -9,7 +9,6 @@ export default function auth(allowed_roles) {
 
             models.userModel.getByAuthenticationKey(authenticationKey)
                 .then(user => {
-                    console.log(user)
                     if (allowed_roles.includes(user.role)) {
                         next()
                     } else {

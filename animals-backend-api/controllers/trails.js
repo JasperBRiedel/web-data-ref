@@ -3,6 +3,7 @@ import { validate } from "../middleware/validator.js";
 import models from "../models/model-switcher.js"
 import xml2js from "xml2js"
 import { Trail } from "../models/trail.js";
+import auth from "../middleware/auth.js";
 
 const trailController = Router()
 
@@ -54,7 +55,7 @@ trailController.get("/trails/:id", validate({ params: getTrailByIDSchema }), (re
 })
 //// End get trail by ID endpoint
 
-trailController.post("/trails/upload/xml", (req, res) => {
+trailController.post("/trails/upload/xml", auth(["admin", "spotter"]), (req, res) => {
     if (req.files && req.files["xml-file"]) {
         // Access the XML file as a string
         const XMLFile = req.files["xml-file"]
@@ -142,7 +143,10 @@ const createTrailSchema = {
     }
 }
 
-trailController.post("/trails/", validate({ body: createTrailSchema }), (req, res) => {
+trailController.post("/trails/", [
+    auth(["admin", "moderator"]),
+    validate({ body: createTrailSchema })
+], (req, res) => {
     // #swagger.summary = 'Create a specific trail'
     /* #swagger.requestBody = {
             description: 'Add a new trail',
@@ -195,7 +199,10 @@ const updateTrailSchema = {
     }
 }
 
-trailController.patch("/trails/", validate({ body: updateTrailSchema }), (req, res) => {
+trailController.patch("/trails/", [
+    auth(["admin", "moderator"]),
+    validate({ body: updateTrailSchema })
+], (req, res) => {
     // #swagger.summary = 'Update a specific trail by ID'
     const trail = req.body
 
@@ -217,7 +224,10 @@ const deleteTrailSchema = {
     }
 }
 
-trailController.delete("/trails/", validate({ body: deleteTrailSchema }), (req, res) => {
+trailController.delete("/trails/", [
+    auth(["admin", "moderator"]),
+    validate({ body: deleteTrailSchema })
+], (req, res) => {
     // #swagger.summary = 'Delete a specific trail by id'
     const trailID = req.body.id
 

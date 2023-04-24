@@ -4,6 +4,7 @@ import { validate } from "../middleware/validator.js";
 
 import models from "../models/model-switcher.js"
 import { Sighting } from "../models/sighting.js";
+import auth from "../middleware/auth.js";
 
 const sightingController = Router()
 
@@ -38,19 +39,21 @@ const getPaginatedSightingListSchema = {
     }
 }
 
-sightingController.get("/sightings/paged/:page", validate({ params: getSightingListSchema }), async (req, res) => {
-    // #swagger.summary = 'Get a collection of sightings in pages'
-    const pageSize = 5;
-    const page = parseInt(req.params.page);
+sightingController.get("/sightings/paged/:page",
+    validate({ params: getPaginatedSightingListSchema }),
+    async (req, res) => {
+        // #swagger.summary = 'Get a collection of sightings in pages'
+        const pageSize = 5;
+        const page = parseInt(req.params.page);
 
-    const sightings = await models.sightingModel.getByPage(page, pageSize);
+        const sightings = await models.sightingModel.getByPage(page, pageSize);
 
-    res.status(200).json({
-        status: 200,
-        message: "Get paginated sightings on page " + page,
-        sightings: sightings,
+        res.status(200).json({
+            status: 200,
+            message: "Get paginated sightings on page " + page,
+            sightings: sightings,
+        })
     })
-})
 //// End get paginated sighting list endpoint
 
 //// Get top sightings list endpoint
@@ -161,7 +164,10 @@ const createSightingSchema = {
     }
 }
 
-sightingController.post("/sightings/", validate({ body: createSightingSchema }), (req, res) => {
+sightingController.post("/sightings/", [
+    auth(["admin", "moderator", "spotter"]),
+    validate({ body: createSightingSchema })
+], (req, res) => {
     // #swagger.summary = 'Create a specific sighting'
     // Get the sighting data out of the request
     const sightingData = req.body
@@ -204,9 +210,15 @@ const deleteSightingSchema = {
     }
 }
 
-sightingController.delete("/sightings/", validate({ body: deleteSightingSchema }), (req, res) => {
+sightingController.delete("/sightings/", [
+    auth(["admin", "moderator", "spotter"]),
+    validate({ body: deleteSightingSchema })
+], (req, res) => {
     // #swagger.summary = 'Delete a specific sighting by id'
     const sightingID = req.body.id
+
+    // TODO: If the role is spotter then we should also check that
+    // the sighting they are deleting was created by them.
 
     res.status(200).json({
         status: 200,

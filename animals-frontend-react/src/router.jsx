@@ -6,7 +6,8 @@ import Register from "./pages/Register"
 import SightingInfo from "./pages/SightingInfo"
 import Sightings from "./pages/Sightings"
 import Trails from "./pages/Trails"
-import UserCRUD from "./pages/UserCRUD"
+import { RestrictedRoute } from "./components/RestrictedRoute"
+import Users from "./pages/Users"
 
 const router = createBrowserRouter([
     {
@@ -19,11 +20,15 @@ const router = createBrowserRouter([
     },
     {
         path: "/animals",
-        element: <Animals />
+        element: <RestrictedRoute allowedRoles={["admin", "moderator"]}>
+            <Animals />
+        </RestrictedRoute>
     },
     {
         path: "/trails",
-        element: <Trails />
+        element: <RestrictedRoute allowedRoles={["admin", "moderator"]}>
+            <Trails />
+        </RestrictedRoute>
     },
     {
         path: "/sightings",
@@ -35,7 +40,9 @@ const router = createBrowserRouter([
     },
     {
         path: "/users",
-        element: <UserCRUD />
+        element: <RestrictedRoute allowedRoles={["admin"]} >
+            <Users />
+        </RestrictedRoute >
     },
     {
         path: "/register",

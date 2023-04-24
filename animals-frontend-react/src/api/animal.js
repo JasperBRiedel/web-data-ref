@@ -34,7 +34,7 @@ export async function getAnimalByID(animalID) {
     return APIResponseObject.animal
 }
 
-export async function createAnimal(animal) {
+export async function createAnimal(animal, authenticationKey) {
     const response = await fetch(
         API_URL + "/animals",
         {
@@ -42,7 +42,7 @@ export async function createAnimal(animal) {
             headers: {
                 'Content-Type': "application/json"
             },
-            body: JSON.stringify(animal)
+            body: JSON.stringify({ ...animal, authenticationKey })
         }
     )
 
@@ -51,7 +51,7 @@ export async function createAnimal(animal) {
     return postCreateAnimalResponse.animal
 }
 
-export async function updateAnimal(animal) {
+export async function updateAnimal(animal, authenticationKey) {
     const response = await fetch(
         API_URL + "/animals",
         {
@@ -59,7 +59,7 @@ export async function updateAnimal(animal) {
             headers: {
                 'Content-Type': "application/json"
             },
-            body: JSON.stringify(animal)
+            body: JSON.stringify({ ...animal, authenticationKey })
         }
     )
 
@@ -68,7 +68,7 @@ export async function updateAnimal(animal) {
     return patchAnimalResponse.animal
 }
 
-export async function deleteAnimal(animal) {
+export async function deleteAnimal(animal, authenticationKey) {
     const response = await fetch(
         API_URL + "/animals",
         {
@@ -76,7 +76,7 @@ export async function deleteAnimal(animal) {
             headers: {
                 'Content-Type': "application/json"
             },
-            body: JSON.stringify(animal)
+            body: JSON.stringify({ ...animal, authenticationKey })
         }
     )
 

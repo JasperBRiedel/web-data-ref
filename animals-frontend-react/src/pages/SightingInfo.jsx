@@ -6,13 +6,14 @@ import { getTrailByID } from "../api/trails";
 import { getUserByID } from "../api/user";
 import Nav from "../components/Nav";
 import Spinner from "../components/Spinner";
+import { useAuthentication } from "../hooks/authentication";
 
 export default function SightingInfo() {
+    const [loggedInUser] = useAuthentication()
     const { sightingID } = useParams()
 
     const [sighting, setSighting] = useState(null)
     useEffect(() => {
-        console.log("Loading sighting")
         getSightingByID(sightingID).then(sighting => setSighting(sighting)).catch(error => console.log(error))
     }, [])
 
@@ -33,7 +34,7 @@ export default function SightingInfo() {
     const [user, setUser] = useState(null)
     useEffect(() => {
         if (sighting) {
-            getUserByID(sighting.user_id).then(user => setUser(user))
+            getUserByID(sighting.user_id, loggedInUser.authenticationKey).then(user => setUser(user))
         }
     }, [sighting])
 

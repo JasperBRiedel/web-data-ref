@@ -68,7 +68,7 @@ export async function getSightingByID(sightingID) {
     return APIResponseObject.sighting
 }
 
-export async function createSighting(sighting) {
+export async function createSighting(sighting, authenticationKey) {
     const response = await fetch(
         API_URL + "/sightings",
         {
@@ -76,7 +76,7 @@ export async function createSighting(sighting) {
             headers: {
                 'Content-Type': "application/json"
             },
-            body: JSON.stringify(sighting)
+            body: JSON.stringify({ ...sighting, authenticationKey })
         }
     )
 
@@ -103,7 +103,7 @@ export async function createSighting(sighting) {
 //     return patchSightingResponse.sighting
 // }
 
-export async function deleteSighting(sighting) {
+export async function deleteSighting(sighting, authenticationKey) {
     const response = await fetch(
         API_URL + "/sightings",
         {
@@ -111,7 +111,7 @@ export async function deleteSighting(sighting) {
             headers: {
                 'Content-Type': "application/json"
             },
-            body: JSON.stringify(sighting)
+            body: JSON.stringify({ ...sighting, authenticationKey })
         }
     )
 

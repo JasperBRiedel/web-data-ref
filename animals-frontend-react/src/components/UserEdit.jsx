@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
 import { getUserByID, update } from "../api/user"
+import { useAuthentication } from "../hooks/authentication"
 
 export default function UserEdit({ userID, onSave, allowEditRole }) {
+    const [user] = useAuthentication()
+
     const [formData, setFormData] = useState({
         id: null,
         firstName: "",
@@ -15,7 +18,7 @@ export default function UserEdit({ userID, onSave, allowEditRole }) {
 
     useEffect(() => {
         if (userID) {
-            getUserByID(userID).then(user => {
+            getUserByID(userID, user.authenticationKey).then(user => {
                 setFormData(user)
             })
         }
@@ -24,7 +27,7 @@ export default function UserEdit({ userID, onSave, allowEditRole }) {
     function saveUser(e) {
         e.preventDefault()
         setStatusMessage("Saving...")
-        update(formData).then(result => {
+        update(formData, user.authenticationKey).then(result => {
             setStatusMessage(result.message)
 
             if (typeof onSave === "function") {
