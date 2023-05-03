@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getUserByID, update } from "../api/user"
+import { create, deleteByID, getUserByID, update } from "../api/user"
 import { useAuthentication } from "../hooks/authentication"
 
 export default function UserEdit({ userID, onSave, allowEditRole }) {
@@ -9,13 +9,14 @@ export default function UserEdit({ userID, onSave, allowEditRole }) {
         id: null,
         firstName: "",
         lastName: "",
-        role: "",
+        role: "spotter",
         email: "",
         password: "",
         authenticationKey: null,
     })
     const [statusMessage, setStatusMessage] = useState("")
 
+    // Load selected user provided in userID prop
     useEffect(() => {
         if (userID) {
             getUserByID(userID, user.authenticationKey).then(user => {
@@ -24,20 +25,70 @@ export default function UserEdit({ userID, onSave, allowEditRole }) {
         }
     }, [userID])
 
-    function saveUser(e) {
-        e.preventDefault()
-        setStatusMessage("Saving...")
-        update(formData, user.authenticationKey).then(result => {
-            setStatusMessage(result.message)
-
-            if (typeof onSave === "function") {
-                onSave()
-            }
+    // Clears the currently loaded user data from the form
+    function clear() {
+        setFormData({
+            id: null,
+            firstName: "",
+            lastName: "",
+            role: "spotter",
+            email: "",
+            password: "",
+            authenticationKey: null,
         })
+        setStatusMessage("")
+    }
+
+    // Updates or inserts a new user based on if the user
+    // has an ID or not yet.
+    function upsert() {
+        if (formData.id) {
+            // The user in the form has an ID which implies they
+            // already exist in the database. Therefore we update.
+            setStatusMessage("Updating user...")
+            update(formData, user.authenticationKey).then(result => {
+                setStatusMessage(result.message)
+
+                if (typeof onSave === "function") {
+                    onSave()
+                }
+            })
+        } else {
+            // The user in the form doesn't have an ID which implies they
+            // DO NOT exist in the database. Therefore we create.
+            setStatusMessage("Creating user...")
+            create(formData, user.authenticationKey).then(result => {
+                setStatusMessage(result.message)
+
+                if (typeof onSave === "function") {
+                    onSave()
+                }
+
+                // We also need to set the users new ID in form
+                // in case the they are immediately updated after being
+                // created.
+                setFormData((existing) => ({ ...existing, id: result.user.id }))
+            })
+        }
+    }
+
+    // Delete the user with the currently loaded id in the form data
+    function remove() {
+        setStatusMessage("Deleting user...")
+        deleteByID(formData.id, user.authenticationKey)
+            .then(result => {
+                setStatusMessage(result.message)
+
+                if (typeof onSave === "function") {
+                    onSave()
+                }
+
+                clear()
+            })
     }
 
     return <div>
-        <form className="flex-grow m-4 max-w-2xl" onSubmit={saveUser} >
+        <form className="flex-grow m-4 max-w-2xl">
             <div className="form-control">
                 <label className="label">
                     <span className="label-text">First Name</span>
@@ -103,7 +154,26 @@ export default function UserEdit({ userID, onSave, allowEditRole }) {
                 />
             </div>
             <div className="my-2">
-                <button className="btn btn-primary mr-2" >Save</button>
+                <input
+                    type="button"
+                    value={formData.id ? "Update" : "Insert"}
+                    onClick={() => upsert()}
+                    className="btn btn-primary mr-2"
+                />
+                <input
+                    type="button"
+                    disabled={!formData.id}
+                    value="Remove"
+                    onClick={() => remove()}
+                    className="btn btn-secondary mr-2"
+                />
+                <input
+                    type="button"
+                    value="Clear"
+                    onClick={() => clear()}
+                    className="btn btn-secondary"
+                />
+
                 <label className="label">
                     <span className="label-text-alt">{statusMessage}</span>
                 </label>

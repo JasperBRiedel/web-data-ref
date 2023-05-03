@@ -105,6 +105,40 @@ export async function update(user, authenticationKey) {
     return patchUserResult
 }
 
+export async function create(user, authenticationKey) {
+    const response = await fetch(
+        API_URL + "/users",
+        {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify({ user, authenticationKey })
+        }
+    )
+
+    const postUserResult = await response.json()
+
+    return postUserResult
+}
+
+export async function deleteByID(userID, authenticationKey) {
+    const response = await fetch(
+        API_URL + "/users/" + userID,
+        {
+            method: "DELETE",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify({ authenticationKey })
+        }
+    )
+
+    const deleteResult = await response.json()
+
+    return deleteResult
+}
+
 export async function registerUser(user) {
     const response = await fetch(
         API_URL + "/users/register",

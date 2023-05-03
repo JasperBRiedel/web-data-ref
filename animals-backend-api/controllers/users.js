@@ -181,29 +181,35 @@ userController.get("/users/by-key/:authenticationKey",
 //// Create user endpoint
 const createUserSchema = {
     type: "object",
-    required: [
-        "email",
-        "password",
-        "role",
-        "firstName",
-        "lastName",
-    ],
+    required: [],
     properties: {
-        email: {
-            type: "string"
-        },
-        password: {
-            type: "string"
-        },
-        role: {
-            type: "string"
-        },
-        firstName: {
-            type: "string"
-        },
-        lastName: {
-            type: "string"
-        },
+        user: {
+            type: "object",
+            required: [
+                "email",
+                "password",
+                "role",
+                "firstName",
+                "lastName",
+            ],
+            properties: {
+                email: {
+                    type: "string"
+                },
+                password: {
+                    type: "string"
+                },
+                role: {
+                    type: "string"
+                },
+                firstName: {
+                    type: "string"
+                },
+                lastName: {
+                    type: "string"
+                },
+            }
+        }
     }
 }
 
@@ -212,7 +218,7 @@ userController.post("/users", [
     validate({ body: createUserSchema })
 ], (req, res) => {
     // Get the user data out of the request
-    const userData = req.body
+    const userData = req.body.user
 
     // hash the password if it isn't already hashed
     if (!userData.password.startsWith("$2a")) {
@@ -308,42 +314,40 @@ userController.post(
 )
 
 //// Update user endpoint
-const updateUserSchema = {
-    type: "object",
-    required: ["user"],
-    properties: {
-        user: {
-            type: "object",
-            properties: {
-                id: {
-                    type: "string"
-                },
-                email: {
-                    type: "string"
-                },
-                password: {
-                    type: "string"
-                },
-                role: {
-                    type: "string"
-                },
-                firstName: {
-                    type: "string"
-                },
-                lastName: {
-                    type: "string"
-                },
-                authenticationKey: {
-                    type: ["string", "null"]
-                },
-            }
-        }
-    }
-}
+// TODO: Fix validation on updates
+// const updateUserSchema = {
+//     type: "object",
+//     required: ["user"],
+//     properties: {
+//         user: {
+//             type: "object",
+//             properties: {
+//                 email: {
+//                     type: "string"
+//                 },
+//                 password: {
+//                     type: "string"
+//                 },
+//                 role: {
+//                     type: "string"
+//                 },
+//                 firstName: {
+//                     type: "string"
+//                 },
+//                 lastName: {
+//                     type: "string"
+//                 },
+//                 authenticationKey: {
+//                     type: ["string", "null"]
+//                 },
+//             }
+//         }
+//     }
+// }
 
 userController.patch("/users", [
     auth(["admin", "moderator", "spotter"]),
-    validate({ body: updateUserSchema })
+    // validate({ body: updateUserSchema })
 ], async (req, res) => {
     // Get the user data out of the request
     //
@@ -404,7 +408,7 @@ userController.delete("/users/:id", [
 ], (req, res) => {
     const userID = req.params.id
 
-    models.userController.deleteById(userID).then(result => {
+    models.userModel.deleteByID(userID).then(result => {
         res.status(200).json({
             status: 200,
             message: "User deleted",
