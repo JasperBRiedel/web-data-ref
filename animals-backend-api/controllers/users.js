@@ -362,7 +362,7 @@ userController.patch("/users", [
 
     // hash the password if it isn't already hashed
     if (userData.password && !userData.password.startsWith("$2a")) {
-        userData.password = await bcrypt.hash(userData.password);
+        userData.password = await bcrypt.hash(userData.password, 10);
     }
 
     // Convert the user data into a User model object
