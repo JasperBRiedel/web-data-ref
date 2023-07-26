@@ -1,3 +1,5 @@
+// TODO: Update with new endpoints for new model functions
+// TODO: Can probably remove schema validation?
 import { Router } from "express";
 
 import { validate } from "../middleware/validator.js";

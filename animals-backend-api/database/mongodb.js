@@ -5,7 +5,6 @@ import { MongoClient } from "mongodb";
 import * as dotenv from "dotenv"
 dotenv.config()
 
-// const connectionString = "mongodb+srv://animal-spotting-user:jQPraNQXDe3TC9ya@cluster0.p45atut.mongodb.net/?retryWrites=true&w=majority"
 const connectionString = process.env.MDBURL
 const client = new MongoClient(connectionString)
-export const db = client.db("animal-spotting")
+export const db = client.db("animal-spotting-api")

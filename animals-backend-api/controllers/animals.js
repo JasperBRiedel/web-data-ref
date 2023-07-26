@@ -1,3 +1,5 @@
+// TODO: Remove once sightings and users updated
+// keeping as reference for documentation comments
 import { Router } from "express";
 
 import { validate } from "../middleware/validator.js";
