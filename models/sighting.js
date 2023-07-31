@@ -1,3 +1,6 @@
+import { ObjectId } from "mongodb"
+import { db } from "../database/mongodb.js";
+
 export function Sighting(
     _id,
     userId,

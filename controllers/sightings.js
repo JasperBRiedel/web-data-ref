@@ -1,3 +1,5 @@
+// TODO: Update to have endpoints that match new model
+// TODO: Write swagger documentation comments
 import { Router } from "express";
 import * as Sightings from "../models/sighting.js";
 import auth from "../middleware/auth.js";
