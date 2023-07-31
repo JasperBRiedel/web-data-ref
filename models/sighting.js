@@ -18,6 +18,41 @@ export function Sighting(
     }
 }
 
+export async function getAll() {
+    return db.collection("sightings").find().toArray()
+}
+
+export async function getByPage(page, size) {
+    // Calculate page offset
+    const offset = page * size
+
+    return db.collection("sightings").find().skip(offset).limit(size).toArray()
+}
+
+export async function getById(id) {
+    // attempt to find the first matching sightings by id
+    let sighting = await db.collection("sightings").findOne({ _id: new ObjectId(id) })
+
+    // check if a sightings was found and handle the result
+    if (sighting) {
+        return sighting
+    } else {
+        return Promise.reject("sighting not found with id " + id)
+    }
+}
+
+export async function getByUserId(id) {
+    // attempt to find the first matching sightings by user id
+    let sighting = await db.collection("sightings").findOne({ userId: new ObjectId(id) })
+
+    // check if a sightings was found and handle the result
+    if (sighting) {
+        return sighting
+    } else {
+        return Promise.reject("sighting not found with user id " + id)
+    }
+}
+
 export async function create(sighting) {
     // Clear _id from sighting to ensure the new sighting does not 
     // have an existing _id from the database, as we want a new _id

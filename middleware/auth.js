@@ -1,13 +1,12 @@
-import models from "../models/model-switcher.js"
+import * as user from "../models/user.js"
 
 export default function auth(allowed_roles) {
     return function (req, res, next) {
-        // Check the body and the query string for an authentication key
-        const authenticationKey = req.body.authenticationKey ?? req.query.authKey
+        const authenticationKey = req.get("X-AUTH-KEY")
 
         if (authenticationKey) {
 
-            models.userModel.getByAuthenticationKey(authenticationKey)
+            user.getByAuthenticationKey(authenticationKey)
                 .then(user => {
                     if (allowed_roles.includes(user.role)) {
                         next()

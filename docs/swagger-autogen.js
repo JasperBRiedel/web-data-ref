@@ -11,7 +11,18 @@ const doc = {
     schemes: ['http'],
     consumes: ['application/json'],
     produces: ['application/json'],
-
+    security: [
+        { AuthenticationKey: [] }
+    ],
+    components: {
+        securitySchemes: {
+            AuthenticationKey: {
+                type: "apiKey",
+                in: "header",
+                name: "X-AUTH-KEY"
+            }
+        }
+    }
 };
 
 const outputFile = './docs/swagger-output.json';

@@ -66,7 +66,7 @@ export async function getByAuthenticationKey(key) {
 
 export async function update(user) {
     // update the user by replacing the user with matching _id with user
-    return db.collection("users").updateOne({ _id: new ObjectId(user._id) }, user)
+    return db.collection("users").replaceOne({ _id: new ObjectId(user._id) }, user)
 }
 
 export async function deleteById(id) {
