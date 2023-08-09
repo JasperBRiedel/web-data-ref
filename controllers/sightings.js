@@ -58,7 +58,7 @@ sightingController.post("/sightings/", [
     const sightingData = req.body
 
     // Convert the sighting data into an Sighting model object
-    const sighting = Sighting(
+    const sighting = Sightings.Sighting(
         null,
         sightingData.userId,
         sightingData.trailName,
