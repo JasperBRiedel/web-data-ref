@@ -73,19 +73,7 @@ export async function deleteById(id) {
     return db.collection("users").deleteOne({ _id: new ObjectId(id) })
 }
 
-// export async function getAll() {
-//     // Get the collection of all users
-//     let allUserResults = await db.collection("users").find().toArray()
-//     // Convert the collection of results into a list of User objects
-//     return await allUserResults.map((userResult) =>
-//         User(
-//             userResult._id.toString(),
-//             userResult.email,
-//             userResult.password,
-//             userResult.role,
-//             userResult.firstName,
-//             userResult.lastName,
-//             userResult.authenticationKey
-//         )
-//     )
-// }
+export async function getAll() {
+    // Get the collection of all users
+    return db.collection("users").find().toArray()
+}
