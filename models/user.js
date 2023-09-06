@@ -65,8 +65,13 @@ export async function getByAuthenticationKey(key) {
 }
 
 export async function update(user) {
-    // update the user by replacing the user with matching _id with user
-    return db.collection("users").replaceOne({ _id: new ObjectId(user._id) }, user)
+    // update the user by replacing the user by id
+
+    // Copy user and delete ID from it
+    const userWithoutId = { ...user }
+    delete userWithoutId._id
+
+    return db.collection("users").replaceOne({ _id: new ObjectId(user._id) }, userWithoutId)
 }
 
 export async function deleteById(id) {

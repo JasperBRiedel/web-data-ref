@@ -553,7 +553,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "_id": {
+                  "id": {
                     "type": "string"
                   },
                   "email": {

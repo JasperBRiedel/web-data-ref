@@ -117,6 +117,7 @@ userController.post("/users/login", (req, res) => {
 
             }
         }).catch(error => {
+            console.log(error)
             res.status(500).json({
                 status: 500,
                 message: "login failed"
@@ -460,7 +461,7 @@ userController.post("/users", [
     } 
     */
     // Get the user data out of the request
-    const userData = req.body.user
+    const userData = req.body
 
     // hash the password if it isn't already hashed
     if (!userData.password.startsWith("$2a")) {
@@ -616,7 +617,7 @@ userController.patch("/users", [
                 schema: {
                     type: 'object',
                     properties: {
-                        _id: {
+                        id: {
                             type: 'string'
                         },
                         email: {
@@ -701,7 +702,7 @@ userController.patch("/users", [
     // object to avoid ambiguity between the logged in user's
     // authentication key and the authentication key of the user
     // currently being updated.
-    const userData = req.body.user
+    const userData = req.body
 
     // TODO: Enforce that moderators and spotters can only
     // update their own user records.  
