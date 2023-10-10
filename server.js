@@ -31,6 +31,11 @@ app.use(userController)
 import sightingController from "./controllers/sightings.js"
 app.use(sightingController)
 
+app.get("/", (request, response) => {
+    // #swagger.summary = 'Redirects to documentation'
+    response.redirect("/docs")
+})
+
 // Start listening for API requests
 app.listen(
     port,

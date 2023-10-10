@@ -12,6 +12,14 @@
   ],
   "basePath": "",
   "paths": {
+    "/": {
+      "get": {
+        "summary": "Redirects to documentation",
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/docs": {
       "get": {
         "summary": "View swagger (OpenAPI 3) documentation",
