@@ -8,6 +8,7 @@
 -   [ ] Migrate endpoints from controllers into routes
     -   [ ] Convert endpoint documentation into @openapi yaml
 -   [ ] Update readme file (technologies and getting started)
+-   [ ] Check and update inline documentation and jsdoc comments
 
 ---
 
