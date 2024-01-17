@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors"
-import docs from "./routes/docs.js"
+import docs from "./middleware/docs.js"
 import users from "./routes/users.js"
 
 // Create express application
