@@ -1,15 +1,18 @@
 import express from "express"
 import cors from "cors"
+import docs from "./routes/docs.js"
+import users from "./routes/users.js"
 
 // Create express application
 const port = 8080
 const app = express()
 
 // Enable cross-origin resources sharing (CORS)
-app.use(cors({
-    // Allow all origins
-    origin: true,
-}))
+app.use(
+    cors({
+        origin: true, // Allow all origins
+    })
+)
 
 // Enable JSON request parsing middleware. Must be done before endpoints are defined.
 //
@@ -21,23 +24,19 @@ app.use(cors({
 // or other general middleware.
 app.use(express.json())
 
-// Import and enable swagger documentation pages
-import docsRouter from "./middleware/swagger-doc.js"
-app.use(docsRouter)
+// Register routes
+app.use(docs)
+app.use(users)
 
-// Import and use the routers of each controller.
-import userController from "./controllers/users.js"
-app.use(userController)
-import sightingController from "./controllers/sightings.js"
-app.use(sightingController)
-
-app.get("/", (request, response) => {
-    // #swagger.summary = 'Redirects to documentation'
-    response.redirect("/docs")
+// Catch errors raised by endpoints and respond with JSON error object
+app.use((err, req, res, next) => {
+    // format error
+    res.status(err.status || 500).json({
+        status: err.status,
+        message: err.message,
+        errors: err.errors,
+    })
 })
 
 // Start listening for API requests
-app.listen(
-    port,
-    () => console.log(`Express started on http://localhost:${port}`),
-)
+app.listen(port, () => console.log(`Express started on http://localhost:${port}`))
