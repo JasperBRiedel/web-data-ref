@@ -41,40 +41,6 @@ export async function loginUser(req, res) {
                 message: "login failed"
             })
         })
-
-    // ES6
-    // try {
-    //     const { email, password } = req.body;
-
-    //     const user = await Users.getByEmail(email)
-
-    //     if (!user) return res.status(404).json({
-    //         status: 404,
-    //         message: "User not found."
-    //     })
-
-    //     const isCorrectPassword = bcrypt.compareSync(password, user.password)
-    //     if (!isCorrectPassword) return res.status(400).json({
-    //         status: 400,
-    //         message: "Invalid credentials"
-    //     })
-
-    //     user.authenticationKey = uuid4().toString()
-
-    //     await Users.update(user)
-
-    //     res.status(200).json({
-    //         status: 200,
-    //         message: "User logged in",
-    //         authenticationKey: user.authenticationKey
-    //     })
-    // } catch (error) {
-    //     console.log(error)
-    //     res.status(500).json({
-    //         status: 500,
-    //         message: "Login failed."
-    //     })
-    // }
 }
 
 /**
@@ -114,12 +80,12 @@ export async function registerUser(req, res) {
     // TODO: check if user with email already exists
     const userAlreadyExists = await Users.getByEmail(userData.email)
 
-    if(userAlreadyExists) {
+    if (userAlreadyExists) {
         res.status(409).json({
             status: 409,
-            message: "Conflict: the provided email address is already associated with an account."
+            message: "The provided email address is already associated with an account."
         })
-        return; 
+        return;
     }
 
 

@@ -1,5 +1,6 @@
 import { Router } from "express"
-import { getUserById } from "../controllers/users.js"
+import { createUser, deleteUserById, getUserByAuthenticationKey, getUserById, updateUserById } from "../controllers/users.js"
+import auth from "../middleware/auth.js"
 
 const userRouter = Router()
 
@@ -46,6 +47,15 @@ const userRouter = Router()
  *                                  - 'moderator'
  *                                  - 'admin'
  */
-userRouter.get("/:id", getUserById)
+userRouter.get("/:id", auth(["admin", "moderator", "spotter"]), getUserById)
+
+userRouter.get("/key/:authenticationKey", getUserByAuthenticationKey)
+
+userRouter.post("/", auth(["admin"]), createUser)
+
+// ? possibly switch from id in body to /:id param
+userRouter.patch("/",auth(["admin", "moderator", "spotter"]), updateUserById)
+
+userRouter.delete("/:id", auth(["admin"], deleteUserById))
 
 export default userRouter

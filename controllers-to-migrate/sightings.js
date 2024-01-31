@@ -6,6 +6,7 @@ import auth from "../middleware/auth.js";
 
 const sightingController = Router()
 
+// * Moved to sightings controller
 sightingController.get("/sightings/all", async (req, res) => {
     // #swagger.summary = 'Get a collection of all sightings'
 
@@ -18,6 +19,7 @@ sightingController.get("/sightings/all", async (req, res) => {
     })
 })
 
+// * Moved to sightings controller
 sightingController.get("/sightings/:page", async (req, res) => {
     // #swagger.summary = 'Get a collection of sightings in pages'
     const pageSize = 5;
@@ -32,6 +34,7 @@ sightingController.get("/sightings/:page", async (req, res) => {
     })
 })
 
+// * Moved to sightings controller
 sightingController.get("/sightings/:id", (req, res) => {
     // #swagger.summary = 'Get a specific sighting by ID'
     const sightingID = req.params.id
@@ -50,6 +53,7 @@ sightingController.get("/sightings/:id", (req, res) => {
     })
 })
 
+// * Moved to sightings controller
 sightingController.post("/sightings/", [
     auth(["admin", "moderator", "spotter"]),
 ], (req, res) => {
@@ -84,6 +88,7 @@ sightingController.post("/sightings/", [
     })
 })
 
+// * Moved to sightings controller
 sightingController.delete("/sightings/", [
     auth(["admin", "moderator", "spotter"]),
 ], (req, res) => {

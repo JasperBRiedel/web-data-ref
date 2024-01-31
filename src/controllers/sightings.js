@@ -105,7 +105,7 @@ export async function createNewSighting(req, res) {
 export async function deleteSightingById(req, res) {
     const sightingID = req.body.id
 
-    // TODO: If the role is spotter then we should also check that
+    // If the role is spotter then we should also check that
     // the sighting they are deleting was created by them.
     const authenticationKey = req.get("X-AUTH-KEY")
     const currentUser = await Users.getByAuthenticationKey(authenticationKey)    
