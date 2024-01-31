@@ -3,7 +3,6 @@ import * as user from "../models/user.js"
 export default function auth(allowed_roles) {
     return function (req, res, next) {
         const authenticationKey = req.get("X-AUTH-KEY")
-
         if (authenticationKey) {
 
             user.getByAuthenticationKey(authenticationKey)

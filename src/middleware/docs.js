@@ -27,10 +27,10 @@ const options = {
                     in: "header",
                     name: "X-AUTH-KEY",
                 },
-            },
+            }
         },
     },
-    apis: ["./src/routes/*.js"],
+    apis: ["./src/routes/*.js", "./src/controllers/*/*.js", "./src/components.yaml"],
 }
 
 const specification = swaggerJSDoc(options)
@@ -39,7 +39,7 @@ docs.get("/test", (req, res) => {
     res.json(specification)
 })
 
-docs.use("/docs", swaggerUi.serve)
+docs.use("/docs", swaggerUi.serve, swaggerUi.setup(specification))
 docs.use(
     OpenApiValidator.middleware({
         apiSpec: specification,

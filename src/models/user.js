@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb"
-import { db } from "../database/mongodb.js";
+import { db } from "../database.js"
 
 /**
  * Create a new user model object
@@ -81,7 +81,7 @@ export async function getByEmail(email) {
     if (user) {
         return user
     } else {
-        return Promise.reject("user not found with email " + email)
+        return null
     }
 }
 
