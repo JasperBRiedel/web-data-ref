@@ -116,7 +116,7 @@ export async function getByAuthenticationKey(key) {
  */
 export async function update(user) {
     // update the user by replacing the user by id
-
+    
     // Copy user and delete ID from it
     const userWithoutId = { ...user }
     delete userWithoutId._id

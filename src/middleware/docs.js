@@ -30,7 +30,7 @@ const options = {
             }
         },
     },
-    apis: ["./src/routes/*.js", "./src/controllers/*/*.js", "./src/components.yaml"],
+    apis: ["./src/routes/*.{js,yaml}", "./src/controllers/*/*.js", "./src/components.yaml"],
 }
 
 const specification = swaggerJSDoc(options)

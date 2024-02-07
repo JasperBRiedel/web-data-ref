@@ -1,15 +1,13 @@
-# TODO: Remove NewAnimalSighting / NewUser, they don't fit schemas
-# TODO: Add responses and requestBodies categories for reusable components
 components:
   schemas:
     AnimalSighting:
       type: object
       properties:
-        _id:
-          type: string
-        userId:
-          type: string
-          example: 62a23958e5a9e9b88f853a67
+        # _id:
+          # type: string
+        # userId:
+          # type: string
+          # example: 62a23958e5a9e9b88f853a67
         trailName:
           type: string
           example: Nathan Ridge Track
@@ -49,9 +47,9 @@ components:
     User:
       type: object
       properties:
-        _id: 
-          type: string
-          example: 65b9f355ff2ee2cc6c66a291
+        # _id: 
+          # type: string
+          # example: 65b9f355ff2ee2cc6c66a291
         email:
           type: string
           format: email
@@ -68,6 +66,7 @@ components:
         authenticationKey:
           type: string
           nullable: true
+          example: ""
     NewUser:
       type: object
       properties:
@@ -87,6 +86,56 @@ components:
         authenticationKey:
           type: string
           nullable: true
+          example: ""
+  requestBodies:
+    NewUser:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NewUser"    
+  responses:
+    200_UserObject:
+      description: Successful response with user object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "Successful response with user object"
+              user:
+                $ref: "#/components/schemas/User"
+    400_InvalidRequest:
+      description: Invalid Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: "Invalid Request"
+    500_DatabaseError:
+      description: Database Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: "Error processing request"
 
         
 

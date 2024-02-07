@@ -17,7 +17,6 @@ app.use(
 )
 
 // Enable JSON request parsing middleware. Must be done before endpoints are defined.
-//
 // If a request with a `Content-Type: application/json` header is
 // made to a route, this middleware will treat the request body as
 // a JSON string. It will attempt to parse it with `JSON.parse()`

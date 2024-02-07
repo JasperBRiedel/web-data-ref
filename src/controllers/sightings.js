@@ -39,7 +39,6 @@ export async function getSightingById(req, res) {
 }
 
 
-// TODO: swap params for query strings 
 /**
  * Controller for: GET /sightings/:page
  * @param {Request} req The Request object

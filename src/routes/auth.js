@@ -32,11 +32,13 @@ const authRouter = Router()
  *              properties:
  *                status:
  *                  type: 'number'
+ *                  example: 200
  *                message:
  *                  type: 'string'
+ *                  example: "Successfully logged in"
  *                authenticationKey:
  *                  type: 'string'
- *      400:
+ *      401:
  *        description: 'Invalid credentials'
  *        content:
  *          application/json:
@@ -61,6 +63,9 @@ const authRouter = Router()
  *                  type: 'number'
  *                message:
  *                  type: 'string'
+ *              example:
+ *                status: 500
+ *                message: "Error processing request"
  */
 authRouter.post("/login", loginUser)
 
@@ -100,7 +105,28 @@ authRouter.post("/login", loginUser)
  *                  type: string
  *                  example: "User successfully registered"
  *                user:
- *                  $ref: "#/components/schemas/NewUser"
+ *                  type: object
+ *                  properties:
+ *                    _id: 
+ *                      type: string
+ *                      example: 65b9f355ff2ee2cc6c66a291
+ *                    email:
+ *                      type: string
+ *                      format: email
+ *                      example: test@test.com
+ *                    password:
+ *                      type: string
+ *                      format: password
+ *                    role:
+ *                      type: string
+ *                      enum:
+ *                        - spotter
+ *                        - admin
+ *                        - moderator
+ *                    authenticationKey:
+ *                      type: string
+ *                      nullable: true
+ *                      example: ""
  *      409:
  *        description: Email address already associated with another account.
  *        content:
@@ -114,7 +140,20 @@ authRouter.post("/login", loginUser)
  *                message:
  *                  type: string
  *                  example: "Email account already associated with another account."
- * 
+ *      500:
+ *        description: 'Database error'
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: 'object'
+ *              properties:
+ *                status:
+ *                  type: 'number'
+ *                message:
+ *                  type: 'string'
+ *              example:
+ *                status: 500
+ *                message: "Error processing request"
  */
 authRouter.post("/register", registerUser)
 
@@ -147,6 +186,20 @@ authRouter.post("/register", registerUser)
  *                message:
  *                  type: string
  *                  example: "User successfully logged out."
+ *      500:
+ *        description: 'Database error'
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: 'object'
+ *              properties:
+ *                status:
+ *                  type: 'number'
+ *                message:
+ *                  type: 'string'
+ *              example:
+ *                status: 500
+ *                message: "Error processing request"
  */
 authRouter.post("/logout", logoutUser)
 
