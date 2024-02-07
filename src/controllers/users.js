@@ -1,28 +1,42 @@
 import * as Users from "../models/user.js"
+import bcrypt from "bcryptjs"
+import express from "express"
 
 /**
  * Controller for: GET /users/:id
- * @param {Request} req The Request object
- * @param {Response} res The Response object
+ * @param {express.Request} req The Request object
+ * @param {express.Response} res The Response object
  */
 export function getUserById(req, res) {
-    res.status(200).json({
-        status: 200,
-        message: "User found",
-        user: {
-            _id: "",
-            email: "",
-            password: "",
-            role: "spotter",
-        },
-    });
-}
+    const userId = req.params.id
 
+    if (!userId) {
+        res.status(400).json({
+            status: 400,
+            message: "Bad Request: User ID parameter required."
+        })
+        return;
+    } 
+
+    Users.getById(userId).then(foundUser => {
+        res.status(200).json({
+            status: 200,
+            message: "User found",
+            user: foundUser
+        });
+    }).catch(error => {
+        res.status(500).json({
+            status: 500,
+            message: "Database error finding user.",
+            error: error
+        })
+    })
+}
 
 /**
  * Controller for: GET /users/key/:authenticationKey
- * @param {Request} req The Request object
- * @param {Response} res The Response object
+ * @param {express.Request} req The Request object
+ * @param {express.Response} res The Response object
  */
 export function getUserByAuthenticationKey(req, res) {
     const authenticationKey = req.params.authenticationKey
@@ -44,12 +58,22 @@ export function getUserByAuthenticationKey(req, res) {
 
 /**
  * Controller for: POST /users/
- * @param {Request} req The Request object
- * @param {Response} res The Response object
+ * @param {express.Request} req The Request object
+ * @param {express.Response} res The Response object
  */
 export async function createUser(req, res) {
     // Get the user data out of the request
     const userData = req.body
+
+    const userAlreadyExists = await Users.getByEmail(userData.email)
+
+    if (userAlreadyExists) {
+        res.status(409).json({
+            status: 409,
+            message: "The provided email address is already associated with an account."
+        })
+        return;
+    }
 
     // hash the password if it isn't already hashed
     if (!userData.password.startsWith("$2a")) {
@@ -81,9 +105,9 @@ export async function createUser(req, res) {
 }
 
 /**
- * Controller for: PATCH /users/:id
- * @param {Request} req The Request object
- * @param {Response} res The Response object
+ * Controller for: PATCH /users/
+ * @param {express.Request} req The Request object
+ * @param {express.Response} res The Response object
  */
 export async function updateUserById(req, res) {
     // Get the user data out of the request
@@ -93,18 +117,29 @@ export async function updateUserById(req, res) {
     // authentication key and the authentication key of the user
     // currently being updated.
     const userData = req.body
+    
+    const currentUserId = req.get("X-AUTH-KEY")
+    const currentUser = await Users.getByAuthenticationKey(currentUserId)
 
-    // TODO: Enforce that moderators and spotters can only
-    // update their own user records.  
+    if (currentUser.role == "spotter" || currentUser.role == "moderator") {
+        if (currentUser._id != foundUser._id) {
+            res.status(403).json({
+                status: 403,
+                message: "You do not have permission to alter this account."
+            })
+            return;
+        }
+    }
 
+    
     // hash the password if it isn't already hashed
     if (userData.password && !userData.password.startsWith("$2a")) {
         userData.password = await bcrypt.hash(userData.password, 10);
     }
-
+    
     // Convert the user data into a User model object
-    const user = Users.User(
-        userData.id,
+    const updatedUser = Users.User(
+        userData._id,
         userData.email,
         userData.password,
         userData.role,
@@ -112,7 +147,7 @@ export async function updateUserById(req, res) {
     )
 
     // Use the update model function to update this user in the DB
-    Users.update(user).then(user => {
+    Users.update(updatedUser).then(user => {
         res.status(200).json({
             status: 200,
             message: "Updated user",
@@ -129,13 +164,13 @@ export async function updateUserById(req, res) {
 
 /**
  * Controller for: DELETE /users/:id
- * @param {Request} req The Request object
- * @param {Response} res The Response object
+ * @param {express.Request} req The Request object
+ * @param {express.Response} res The Response object
  */
 export function deleteUserById(req, res) {
     const userID = req.params.id
 
-    Users.deleteByID(userID).then(result => {
+    Users.deleteById(userID).then(result => {
         res.status(200).json({
             status: 200,
             message: "User deleted",

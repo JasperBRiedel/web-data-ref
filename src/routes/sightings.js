@@ -7,7 +7,7 @@ const sightingsRouter = Router()
 /**
  * @openapi
  * /sightings:
- *    get:
+ *  get:
  *      summary: Get all sightings
  *      tags: [Sightings]
  *      responses:
@@ -28,6 +28,20 @@ const sightingsRouter = Router()
  *                    type: array
  *                    items:
  *                      $ref: "#/components/schemas/AnimalSighting"
+ *        500:
+ *          description: 'Database error'
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: 'object'
+ *                properties:
+ *                  status:
+ *                    type: 'number'
+ *                  message:
+ *                    type: 'string'
+ *                example:
+ *                  status: 500
+ *                  message: "Error processing request"
  */
 sightingsRouter.get("/", getAllSightings)
 
@@ -59,6 +73,20 @@ sightingsRouter.get("/", getAllSightings)
  *                   type: 'string'
  *                 sighting:
  *                    $ref: "#/components/schemas/AnimalSighting"
+ *        500:
+ *          description: 'Database error'
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: 'object'
+ *                properties:
+ *                  status:
+ *                    type: 'number'
+ *                  message:
+ *                    type: 'string'
+ *                example:
+ *                  status: 500
+ *                  message: "Error processing request"
  */
 sightingsRouter.post("/", auth(["admin", "moderator", "spotter"]), createNewSighting)
 
@@ -93,6 +121,20 @@ sightingsRouter.post("/", auth(["admin", "moderator", "spotter"]), createNewSigh
  *                  message:
  *                    type: string
  *                    example: "Sighting successfully deleted"
+ *        500:
+ *          description: 'Database error'
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: 'object'
+ *                properties:
+ *                  status:
+ *                    type: 'number'
+ *                  message:
+ *                    type: 'string'
+ *                example:
+ *                  status: 500
+ *                  message: "Error processing request"
  */
 sightingsRouter.delete("/", auth(["admin", "moderator", "spotter"]), deleteSightingById)
 
@@ -125,13 +167,26 @@ sightingsRouter.delete("/", auth(["admin", "moderator", "spotter"]), deleteSight
  *                    example: Get sighting by ID
  *                  sightings:
  *                     $ref: "#/components/schemas/AnimalSighting"
+ *        500:
+ *          description: 'Database error'
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: 'object'
+ *                properties:
+ *                  status:
+ *                    type: 'number'
+ *                  message:
+ *                    type: 'string'
+ *                example:
+ *                  status: 500
+ *                  message: "Error processing request"
  */
 sightingsRouter.get("/:id", getSightingById)
 
-// TODO: switch over to query strings
 /**
  * @openapi
- * /sightings/{page}:
+ * /sightings/page/{page}:
  *    get:
  *      summary: Get Sightings by Page
  *      tags: [Sightings]
@@ -160,8 +215,22 @@ sightingsRouter.get("/:id", getSightingById)
  *                    type: array
  *                    items:
  *                      $ref: "#/components/schemas/AnimalSighting"
+ *        500:
+ *          description: 'Database error'
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: 'object'
+ *                properties:
+ *                  status:
+ *                    type: 'number'
+ *                  message:
+ *                    type: 'string'
+ *                example:
+ *                  status: 500
+ *                  message: "Error processing request"
  */
-sightingsRouter.get("/:page", getSightingsByPage)
+sightingsRouter.get("/page/:page", getSightingsByPage)
 
 
 export default sightingsRouter
