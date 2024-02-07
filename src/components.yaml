@@ -1,0 +1,93 @@
+# TODO: Remove NewAnimalSighting / NewUser, they don't fit schemas
+# TODO: Add responses and requestBodies categories for reusable components
+components:
+  schemas:
+    AnimalSighting:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+          example: 62a23958e5a9e9b88f853a67
+        trailName:
+          type: string
+          example: Nathan Ridge Track
+        animalName:
+          type: string
+          example: Koala
+        animalCount:
+          type: integer
+          example: 2
+        animalSpecies:
+          type: string
+          example: P. cinereus
+        sightingTime:
+          type: string
+          format: date-time
+    NewAnimalSighting:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 62a23958e5a9e9b88f853a67
+        trailName:
+          type: string
+          example: Nathan Ridge Track
+        animalName:
+          type: string
+          example: Koala
+        animalCount:
+          type: integer
+          example: 2
+        animalSpecies:
+          type: string
+          example: P. cinereus
+        sightingTime:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        _id: 
+          type: string
+          example: 65b9f355ff2ee2cc6c66a291
+        email:
+          type: string
+          format: email
+          example: test@test.com
+        password:
+          type: string
+          format: password
+        role:
+          type: string
+          enum:
+            - spotter
+            - admin
+            - moderator
+        authenticationKey:
+          type: string
+          nullable: true
+    NewUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: test@test.com
+        password:
+          type: string
+          format: password
+        role:
+          type: string
+          enum:
+            - spotter
+            - admin
+            - moderator
+        authenticationKey:
+          type: string
+          nullable: true
+
+        
+
+

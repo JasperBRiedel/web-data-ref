@@ -6,6 +6,8 @@ import auth from "../middleware/auth.js";
 
 const userController = Router()
 
+
+// * Moved to auth controller
 userController.post("/users/login", (req, res) => {
     /* 
     #swagger.summary = 'User login'
@@ -126,6 +128,7 @@ userController.post("/users/login", (req, res) => {
 }
 )
 
+// * Moved to auth controller
 userController.post("/users/logout", (req, res) => {
     /* 
     #swagger.summary = 'User logout'
@@ -203,6 +206,7 @@ userController.post("/users/logout", (req, res) => {
 }
 )
 
+// * Moved to users controller
 userController.get("/users/:id",
     auth(["admin", "moderator", "spotter"]),
     (req, res) => {
@@ -291,6 +295,7 @@ userController.get("/users/:id",
     }
 )
 
+// * Moved to users controller
 userController.get("/users/key/:authenticationKey",
     (req, res) => {
         /* 
@@ -375,6 +380,7 @@ userController.get("/users/key/:authenticationKey",
     }
 )
 
+// * Moved to users controller
 userController.post("/users", [
     auth(["admin"]),
 ], (req, res) => {
@@ -493,6 +499,7 @@ userController.post("/users", [
 }
 )
 
+// * Moved to auth controller
 userController.post(
     "/users/register",
     (req, res) => {
@@ -605,6 +612,7 @@ userController.post(
     }
 )
 
+// * Moved to users controller
 userController.patch("/users", [
     auth(["admin", "moderator", "spotter"]),
 ], async (req, res) => {
@@ -737,6 +745,8 @@ userController.patch("/users", [
     })
 })
 
+
+// * Moved to users controller
 userController.delete("/users/:id", [
     auth(["admin"]),
 ], (req, res) => {

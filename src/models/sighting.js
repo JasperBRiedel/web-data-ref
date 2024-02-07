@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb"
-import { db } from "../database/mongodb.js";
+import { db } from "../database.js"
 
 /**
  * Create a new sighting model object
@@ -33,7 +33,6 @@ export function Sighting(
         sightingTime: new Date(sightingTime),
     }
 }
-
 
 /**
  * Get all sightings
@@ -92,7 +91,7 @@ export async function getSightingsBetweenDatesOnTrail(trailName, start, end) {
  * @returns {Promise<String>} - A promise for the name of trail with the most sightings
  */
 export async function getTrailWithMostAnimals() {
-    sighting = await db.collection("sightings").find().sort({ animalCount: -1 }).limit(1)
+    let sighting = await db.collection("sightings").find().sort({ animalCount: -1 }).limit(1)
 
     if (sighting) {
         return sighting.trailName
@@ -158,6 +157,15 @@ export async function create(sighting) {
 
     // Insert the sighting document and implicitly add the new _id to sighting
     return db.collection("sightings").insertOne(sighting)
+}
+
+/**
+ * 
+ * @param {string} id 
+ * @returns {Promise<DeleteOneResult>}
+ */
+export async function deleteByID(id) {
+    return db.collection("sightings").deleteOne({ _id: new ObjectId(id) })
 }
 
 /**

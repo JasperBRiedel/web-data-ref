@@ -1,75 +1,15 @@
 import { Router } from "express"
+import { createUser, deleteUserById, getUserByAuthenticationKey, getUserById, updateUserById } from "../controllers/users.js"
+import auth from "../middleware/auth.js"
 
-const users = Router()
-
-/**
- * @openapi
- * /users/login:
- *      post:
- *          summary: 'Attempt username and password based authentication'
- *          requestBody:
- *            description: 'Attempt user login with email and password'
- *            content:
- *              application/json:
- *                schema:
- *                  type: 'object'
- *                  properties:
- *                    email:
- *                      type: 'string'
- *                    password:
- *                      type: 'string'
- *                example:
- *                  email: 'user@server.com'
- *                  password: 'abc123'
- *          responses:
- *            '200':
- *              description: 'Login successful'
- *              content:
- *                application/json:
- *                  schema:
- *                    type: 'object'
- *                    properties:
- *                      status:
- *                        type: 'number'
- *                      message:
- *                        type: 'string'
- *                      authenticationKey:
- *                        type: 'string'
- *            '400':
- *              description: 'Invalid credentials'
- *              content:
- *                application/json:
- *                  schema:
- *                    type: 'object'
- *                    properties:
- *                      status:
- *                        type: 'number'
- *                      message:
- *                        type: 'string'
- *            '500':
- *              description: 'Database error'
- *              content:
- *                application/json:
- *                  schema:
- *                    type: 'object'
- *                    properties:
- *                      status:
- *                        type: 'number'
- *                      message:
- *                        type: 'string'
- */
-users.post("/users/login", (req, res) => {
-    res.status(500).json({
-        status: 500,
-        message: "User model not yet connected",
-    })
-})
+const userRouter = Router()
 
 /**
  * @openapi
  * /users/{id}:
  *      get:
  *          summary: 'Get user by ID'
+ *          tags: [Users]
  *          security:
  *              - ApiKey: []
  *          parameters:
@@ -107,17 +47,15 @@ users.post("/users/login", (req, res) => {
  *                                  - 'moderator'
  *                                  - 'admin'
  */
-users.get("/users/:id", (req, res) => {
-    res.status(200).json({
-        status: 200,
-        message: "User found",
-        user: {
-            _id: "",
-            email: "",
-            password: "",
-            role: "spotter",
-        },
-    })
-})
+userRouter.get("/:id", auth(["admin", "moderator", "spotter"]), getUserById)
 
-export default users
+userRouter.get("/key/:authenticationKey", getUserByAuthenticationKey)
+
+userRouter.post("/", auth(["admin"]), createUser)
+
+// ? possibly switch from id in body to /:id param
+userRouter.patch("/",auth(["admin", "moderator", "spotter"]), updateUserById)
+
+userRouter.delete("/:id", auth(["admin"], deleteUserById))
+
+export default userRouter

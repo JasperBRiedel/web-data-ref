@@ -1,7 +1,9 @@
 import express from "express"
 import cors from "cors"
 import docs from "./middleware/docs.js"
-import users from "./routes/users.js"
+import userRouter from "./routes/users.js"
+import authRouter from "./routes/auth.js"
+import sightingsRouter from "./routes/sightings.js"
 
 // Create express application
 const port = 8080
@@ -26,7 +28,9 @@ app.use(express.json())
 
 // Register routes
 app.use(docs)
-app.use(users)
+app.use("/sightings", sightingsRouter)
+app.use("/auth", authRouter)
+app.use("/users", userRouter)
 
 // Catch errors raised by endpoints and respond with JSON error object
 app.use((err, req, res, next) => {
