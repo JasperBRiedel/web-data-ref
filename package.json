@@ -1,5 +1,5 @@
 {
-  "name": "animals-backend-api",
+  "name": "web-data-ref",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -16,7 +16,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "express-fileupload": "^1.4.0",
     "express-openapi-validator": "^5.1.2",
     "mongodb": "^5.0.1",
     "swagger-jsdoc": "^6.2.8",
